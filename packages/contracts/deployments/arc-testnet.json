@@ -16,5 +16,24 @@
       "verified": true,
       "explorerUrl": "https://explorer.testnet.arc.io/address/0x09503c928c13ebc01EfB6fD291825020C5e876Ba"
     }
+  },
+  "proofs": {
+    "circleAgentWalletCall": {
+      "walletAddress": "0x218b80d3bCDaB79C66ee24AA15A3c8e2527f5E21",
+      "contractAddress": "0x09503c928c13ebc01EfB6fD291825020C5e876Ba",
+      "function": "record(bytes32)",
+      "correlationId": "0x779b5628bd2bd79244f57a402fce2ab7854d3ff3685ee1be5339df0e7ceb572a",
+      "transactionHash": "0x7eb7fd590d1be31e4a589373f5d983b757d5bfcf17313013eb7d8463c00116c0",
+      "blockNumber": 62996428,
+      "blockHash": "0xe9bbbb54ffd8cf4da65012ff56d35993cfe957529f2a8c3f0bd7fef0a1cd652a",
+      "executedAt": "2026-09-19T23:55:05Z",
+      "nativeValueWei": "0",
+      "verifiedState": {
+        "lastCaller": "0x218b80d3bCDaB79C66ee24AA15A3c8e2527f5E21",
+        "lastCorrelationId": "0x779b5628bd2bd79244f57a402fce2ab7854d3ff3685ee1be5339df0e7ceb572a",
+        "callCount": 1
+      },
+      "explorerUrl": "https://explorer.testnet.arc.io/tx/0x7eb7fd590d1be31e4a589373f5d983b757d5bfcf17313013eb7d8463c00116c0"
+    }
   }
 }

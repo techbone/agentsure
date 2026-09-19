@@ -21,7 +21,7 @@ Exit criteria:
 ## Milestone 1 — Engineering foundation
 
 Target: September 20–22
-Status: In progress — local foundation complete; Circle Agent Wallet testnet proof pending
+Status: Complete
 
 Deliverables:
 

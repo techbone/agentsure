@@ -1,6 +1,6 @@
 # Circle Agent Wallet Contract-Call Proof
 
-Status: Probe deployed and verified; awaiting user-controlled Circle authentication
+Status: Complete
 
 ## Purpose
 
@@ -48,3 +48,16 @@ Then verify onchain that:
 - the explorer shows a successful finalized transaction.
 
 Record the verified contract address and transaction hash in a deployment manifest. Do not record authentication artifacts.
+
+## Verified result
+
+- Circle Agent Wallet: `0x218b80d3bCDaB79C66ee24AA15A3c8e2527f5E21`
+- Probe: `0x09503c928c13ebc01EfB6fD291825020C5e876Ba`
+- Correlation ID: `0x779b5628bd2bd79244f57a402fce2ab7854d3ff3685ee1be5339df0e7ceb572a`
+- Transaction: `0x7eb7fd590d1be31e4a589373f5d983b757d5bfcf17313013eb7d8463c00116c0`
+- Finalized block: `62996428`
+- Native value sent: `0`
+- Verified `lastCaller()`: Circle Agent Wallet
+- Verified `lastCorrelationId()`: submitted correlation ID
+- Verified `callCount()`: `1`
+- [Arc Testnet transaction](https://explorer.testnet.arc.io/tx/0x7eb7fd590d1be31e4a589373f5d983b757d5bfcf17313013eb7d8463c00116c0)

@@ -32,13 +32,14 @@ The MVP proves one complete Arc-native lifecycle:
 
 ## Current status
 
-Milestone 0 is complete. Milestone 1's local engineering foundation is complete and the
-Circle Agent Wallet testnet proof is the remaining gate before contract implementation.
+Milestones 0 and 1 are complete. The architecture is locked, the engineering foundation is tested,
+and a Circle Agent Wallet has called AgentSure's verified probe contract on Arc Testnet.
 
 - npm workspace with pinned Node, npm, TypeScript, Biome, Vitest, viem, and Zod versions.
 - Official Arc Foundry toolchain installed through a checksum-verified, pinned installer.
 - Arc chain constants and unit-safe USDC helpers covered by tests.
 - Harmless `ArcCallProbe` contract compiled and tested with the Arc toolchain.
+- Circle Agent Wallet contract execution proven in a finalized, zero-value Arc Testnet transaction.
 - CI covers formatting, linting, type checks, tests, npm audit, and repository secret scanning.
 
 - [Architecture](docs/ARCHITECTURE.md)
