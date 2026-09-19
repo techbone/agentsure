@@ -1,0 +1,20 @@
+{
+  "network": "Arc Testnet",
+  "chainId": 5042002,
+  "rpcUrl": "https://rpc.testnet.arc.io",
+  "explorerUrl": "https://explorer.testnet.arc.io",
+  "contracts": {
+    "ArcCallProbe": {
+      "address": "0x09503c928c13ebc01EfB6fD291825020C5e876Ba",
+      "deployer": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+      "transactionHash": "0xf2ae5b6654f28fd69c7ab99cd2ca66f2e7816a91187fd8cf40e0937ad2009de4",
+      "blockNumber": 62985966,
+      "blockHash": "0x10fd489ec83750816abc7f0d87179df3459b7156b30b97f51455e0b123bfe141",
+      "deployedAt": "2026-09-19T22:27:48Z",
+      "source": "src/ArcCallProbe.sol:ArcCallProbe",
+      "compiler": "0.8.30",
+      "verified": true,
+      "explorerUrl": "https://explorer.testnet.arc.io/address/0x09503c928c13ebc01EfB6fD291825020C5e876Ba"
+    }
+  }
+}
