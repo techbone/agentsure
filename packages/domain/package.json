@@ -1,0 +1,18 @@
+{
+  "name": "@agentsure/domain",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "viem": "2.56.8",
+    "zod": "4.6.5"
+  }
+}

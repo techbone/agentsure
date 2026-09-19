@@ -1,0 +1,36 @@
+# Dependencies and build output
+node_modules/
+.tools/
+dist/
+coverage/
+.next/
+out/
+cache/
+broadcast/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Foundry
+packages/contracts/lib/
+packages/contracts/out/
+packages/contracts/cache/
+packages/contracts/broadcast/
+packages/contracts/keystores/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Logs and local state
+*.log
+*.sqlite
+*.sqlite3
+.turbo/

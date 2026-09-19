@@ -1,0 +1,39 @@
+{
+  "name": "agentsure",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The programmable safety layer for autonomous money on Arc.",
+  "license": "UNLICENSED",
+  "packageManager": "npm@10.9.8",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.23.2 <23",
+    "npm": ">=10.9.8 <11"
+  },
+  "scripts": {
+    "arc:install": "bash scripts/install-arc-foundry.sh",
+    "check": "npm run format:check && npm run contracts:format:check && npm run lint && npm run typecheck && npm run test",
+    "contracts:build": "FOUNDRY_PROFILE=arc .tools/arc-foundry/v0.8.0-1/forge build --root packages/contracts",
+    "contracts:deploy:probe:testnet": "FOUNDRY_PROFILE=arc .tools/arc-foundry/v0.8.0-1/forge create src/ArcCallProbe.sol:ArcCallProbe --root packages/contracts --rpc-url https://rpc.testnet.arc.io --keystore packages/contracts/keystores/agentsure-testnet-deployer --broadcast",
+    "contracts:format": ".tools/arc-foundry/v0.8.0-1/forge fmt --root packages/contracts",
+    "contracts:format:check": ".tools/arc-foundry/v0.8.0-1/forge fmt --root packages/contracts --check",
+    "contracts:test": "FOUNDRY_PROFILE=arc .tools/arc-foundry/v0.8.0-1/forge test --root packages/contracts",
+    "contracts:verify:probe:testnet": "FOUNDRY_PROFILE=arc .tools/arc-foundry/v0.8.0-1/forge verify-contract 0x09503c928c13ebc01EfB6fD291825020C5e876Ba src/ArcCallProbe.sol:ArcCallProbe --root packages/contracts --chain-id 5042002 --verifier blockscout --verifier-url https://explorer.testnet.arc.io/api/ --watch",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:coverage": "npm run test:coverage --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@types/node": "22.20.3",
+    "@vitest/coverage-v8": "5.0.1",
+    "typescript": "7.0.2",
+    "vitest": "5.0.1"
+  }
+}

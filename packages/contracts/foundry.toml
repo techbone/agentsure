@@ -1,0 +1,28 @@
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.30"
+evm_version = "osaka"
+optimizer = true
+optimizer_runs = 200
+bytecode_hash = "none"
+cbor_metadata = false
+
+[profile.arc]
+network = "arc"
+
+[fmt]
+line_length = 100
+tab_width = 4
+bracket_spacing = true
+int_types = "long"
+
+[fuzz]
+runs = 1_000
+
+[invariant]
+runs = 256
+depth = 64
+fail_on_revert = true
