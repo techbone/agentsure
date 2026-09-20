@@ -3,6 +3,10 @@ src = "src"
 test = "test"
 out = "out"
 libs = ["lib"]
+remappings = [
+    "@openzeppelin/contracts/=../../node_modules/@openzeppelin/contracts/",
+    "forge-std/=../../node_modules/forge-std/src/",
+]
 solc_version = "0.8.30"
 evm_version = "osaka"
 optimizer = true
