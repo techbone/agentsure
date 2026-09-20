@@ -25,6 +25,8 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint .",
+    "security:install": "bash scripts/install-slither.sh",
+    "security:slither": "bash scripts/run-slither.sh",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "test:coverage": "npm run test:coverage --workspaces --if-present"

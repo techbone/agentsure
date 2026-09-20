@@ -1,0 +1,6 @@
+{
+  "disable_color": true,
+  "exclude_dependencies": true,
+  "fail_on": "medium",
+  "filter_paths": "(^|/)(test|node_modules)/"
+}

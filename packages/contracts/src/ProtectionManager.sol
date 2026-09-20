@@ -145,6 +145,8 @@ contract ProtectionManager is Ownable2Step, Pausable, ReentrancyGuard {
     }
 
     /// @notice Opens a protected ERC-4626 position and records the exact shares received.
+    // The nonReentrant modifier covers the vault call inside _collectFeeAndDeposit.
+    // slither-disable-next-line reentrancy-benign
     function openPolicy(
         address vault,
         address beneficiary,
@@ -187,6 +189,8 @@ contract ProtectionManager is Ownable2Step, Pausable, ReentrancyGuard {
     }
 
     /// @notice Executes a valid downside exit. Anyone may call; proceeds always go to the beneficiary.
+    // Timestamp is the explicit policy-window boundary, not a source of financial randomness.
+    // slither-disable-next-line timestamp
     function executeProtection(uint256 policyId, uint256 minimumAssets)
         external
         nonReentrant
@@ -207,6 +211,8 @@ contract ProtectionManager is Ownable2Step, Pausable, ReentrancyGuard {
     }
 
     /// @notice Lets the policy owner exit before the protection window ends.
+    // Timestamp is the explicit policy-window boundary, not a source of financial randomness.
+    // slither-disable-next-line timestamp
     function cancelPolicy(uint256 policyId, uint256 minimumAssets)
         external
         nonReentrant
@@ -225,6 +231,8 @@ contract ProtectionManager is Ownable2Step, Pausable, ReentrancyGuard {
     }
 
     /// @notice Closes an expired policy so its funds cannot become stuck. Anyone may call.
+    // Timestamp is the explicit policy-window boundary, not a source of financial randomness.
+    // slither-disable-next-line timestamp
     function closeExpiredPolicy(uint256 policyId, uint256 minimumAssets)
         external
         nonReentrant
@@ -239,6 +247,8 @@ contract ProtectionManager is Ownable2Step, Pausable, ReentrancyGuard {
         emit ExpiredPolicyClosed(policyId, msg.sender, policy.beneficiary, assetsReturned);
     }
 
+    // The detector mistakes the zero-address existence check for timestamp logic.
+    // slither-disable-next-line timestamp
     function getPolicy(uint256 policyId) external view returns (Policy memory) {
         Policy memory policy = _policies[policyId];
         if (policy.owner == address(0)) {
@@ -319,6 +329,8 @@ contract ProtectionManager is Ownable2Step, Pausable, ReentrancyGuard {
         }
     }
 
+    // Balance deltas intentionally validate an untrusted vault's return value. Every caller is nonReentrant.
+    // slither-disable-next-line reentrancy-balance
     function _collectFeeAndDeposit(address vault, uint256 principalAssets, uint256 minimumShares)
         private
         returns (uint256 shares)
@@ -365,6 +377,8 @@ contract ProtectionManager is Ownable2Step, Pausable, ReentrancyGuard {
         );
     }
 
+    // Balance deltas intentionally validate settlement. Every caller is nonReentrant and state changes first.
+    // slither-disable-next-line reentrancy-balance
     function _exitPolicy(Policy storage policy, PolicyStatus finalStatus, uint256 minimumAssets)
         private
         returns (uint256 assetsReturned)
