@@ -63,6 +63,7 @@ Exit criteria:
 ## Milestone 3 — Guardian
 
 Target: September 27–29
+Status: Complete
 
 Deliverables:
 

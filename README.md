@@ -32,9 +32,10 @@ The MVP proves one complete Arc-native lifecycle:
 
 ## Current status
 
-Milestones 0, 1, and 2 are complete. The architecture is locked, the engineering foundation is
-tested, a Circle Agent Wallet has called AgentSure's verified probe contract, and the bounded V1
-protection contracts are deployed and source-verified on Arc Testnet.
+Milestones 0 through 3 are complete. The architecture is locked, the engineering foundation is
+tested, a Circle Agent Wallet has called AgentSure's verified probe contract, the bounded V1
+protection contracts are deployed and source-verified on Arc Testnet, and the independent guardian
+is restart-safe and ready for the end-to-end testnet proof.
 
 - npm workspace with pinned Node, npm, TypeScript, Biome, Vitest, viem, and Zod versions.
 - Official Arc Foundry toolchain installed through a checksum-verified, pinned installer.
@@ -44,6 +45,11 @@ protection contracts are deployed and source-verified on Arc Testnet.
 - `ProtectionManager` and the explicitly demo-only `DemoRiskVault` deployed with small testnet caps.
 - Unit, fuzz, invariant, and adversarial contract tests cover policy lifecycle and settlement boundaries.
 - Slither static analysis is pinned and run against upstream Solidity 0.8.30 alongside Arc Foundry tests.
+- Guardian indexes finalized Arc events with an atomic, restart-safe cursor and deterministic ordering.
+- Guardian reads authoritative policy value, rejects invalid triggers, and simulates every valid exit
+  before its dedicated keeper submits a transaction.
+- Pending transactions are reconciled after restart without a duplicate submission, while structured
+  logs, liveness, readiness, and Prometheus metrics expose operating state.
 - CI covers formatting, linting, type checks, tests, npm audit, and repository secret scanning.
 
 ### Arc Testnet contracts
@@ -57,6 +63,7 @@ protection contracts are deployed and source-verified on Arc Testnet.
 - [ADR-0001: Protect at entry](docs/adr/0001-protect-at-entry.md)
 - [ADR-0002: Separate permissionless guardian](docs/adr/0002-separate-permissionless-guardian.md)
 - [Circle Agent Wallet proof runbook](docs/runbooks/CIRCLE_WALLET_PROOF.md)
+- [Guardian operations runbook](docs/runbooks/GUARDIAN.md)
 
 ## Official references
 
