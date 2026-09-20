@@ -29,6 +29,7 @@
     "lint": "biome lint .",
     "security:install": "bash scripts/install-slither.sh",
     "security:slither": "bash scripts/run-slither.sh",
+    "guardian:start": "npm run start --workspace @agentsure/guardian",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "test:coverage": "npm run test:coverage --workspaces --if-present"
@@ -37,6 +38,7 @@
     "@biomejs/biome": "2.5.14",
     "@types/node": "22.20.3",
     "@vitest/coverage-v8": "5.0.1",
+    "tsx": "4.23.15",
     "typescript": "7.0.2",
     "vitest": "5.0.1"
   }

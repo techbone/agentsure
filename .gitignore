@@ -33,4 +33,5 @@ packages/contracts/keystores/
 *.log
 *.sqlite
 *.sqlite3
+.data/
 .turbo/

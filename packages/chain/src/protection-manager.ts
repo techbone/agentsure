@@ -1,0 +1,90 @@
+export const protectionManagerAbi = [
+  {
+    type: "event",
+    name: "PolicyOpened",
+    inputs: [
+      { indexed: true, name: "policyId", type: "uint256" },
+      { indexed: true, name: "owner", type: "address" },
+      { indexed: true, name: "beneficiary", type: "address" },
+      { indexed: false, name: "vault", type: "address" },
+      { indexed: false, name: "principalAssets", type: "uint256" },
+      { indexed: false, name: "shares", type: "uint256" },
+      { indexed: false, name: "triggerAssets", type: "uint256" },
+      { indexed: false, name: "lossLimitBps", type: "uint16" },
+      { indexed: false, name: "expiresAt", type: "uint64" },
+      { indexed: false, name: "protectionFeeAssets", type: "uint256" },
+    ],
+  },
+  {
+    type: "event",
+    name: "ProtectionExecuted",
+    inputs: [
+      { indexed: true, name: "policyId", type: "uint256" },
+      { indexed: true, name: "executor", type: "address" },
+      { indexed: true, name: "beneficiary", type: "address" },
+      { indexed: false, name: "assetsReturned", type: "uint256" },
+    ],
+  },
+  {
+    type: "event",
+    name: "PolicyCancelled",
+    inputs: [
+      { indexed: true, name: "policyId", type: "uint256" },
+      { indexed: true, name: "owner", type: "address" },
+      { indexed: true, name: "beneficiary", type: "address" },
+      { indexed: false, name: "assetsReturned", type: "uint256" },
+    ],
+  },
+  {
+    type: "event",
+    name: "ExpiredPolicyClosed",
+    inputs: [
+      { indexed: true, name: "policyId", type: "uint256" },
+      { indexed: true, name: "executor", type: "address" },
+      { indexed: true, name: "beneficiary", type: "address" },
+      { indexed: false, name: "assetsReturned", type: "uint256" },
+    ],
+  },
+  {
+    type: "function",
+    name: "getPolicy",
+    stateMutability: "view",
+    inputs: [{ name: "policyId", type: "uint256" }],
+    outputs: [
+      {
+        name: "policy",
+        type: "tuple",
+        components: [
+          { name: "owner", type: "address" },
+          { name: "beneficiary", type: "address" },
+          { name: "vault", type: "address" },
+          { name: "principalAssets", type: "uint256" },
+          { name: "shares", type: "uint256" },
+          { name: "triggerAssets", type: "uint256" },
+          { name: "assetsReturned", type: "uint256" },
+          { name: "openedAt", type: "uint64" },
+          { name: "expiresAt", type: "uint64" },
+          { name: "lossLimitBps", type: "uint16" },
+          { name: "status", type: "uint8" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "function",
+    name: "getPolicyValue",
+    stateMutability: "view",
+    inputs: [{ name: "policyId", type: "uint256" }],
+    outputs: [{ name: "currentAssets", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "executeProtection",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "policyId", type: "uint256" },
+      { name: "minimumAssets", type: "uint256" },
+    ],
+    outputs: [{ name: "assetsReturned", type: "uint256" }],
+  },
+] as const;
