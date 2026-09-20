@@ -15,6 +15,52 @@
       "compiler": "0.8.30",
       "verified": true,
       "explorerUrl": "https://explorer.testnet.arc.io/address/0x09503c928c13ebc01EfB6fD291825020C5e876Ba"
+    },
+    "DemoRiskVault": {
+      "address": "0xa70344cEeA5598B836B148B0d83b19eE988b4599",
+      "deployer": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+      "transactionHash": "0xb8c5819d9087b58e42dd8e0c05530869369b2816ca5cbb7b6aa50dbf7a62df04",
+      "blockNumber": 63052381,
+      "blockHash": "0xbd10aa3c4c470f52296109d1a236da890bc14f6d4d532c6cf87a92aa92f8941e",
+      "deployedAt": "2026-09-20T07:41:50Z",
+      "source": "src/DemoRiskVault.sol:DemoRiskVault",
+      "compiler": "0.8.30",
+      "verified": true,
+      "configuration": {
+        "assetToken": "0x3600000000000000000000000000000000000000",
+        "owner": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+        "lossSink": "0x000000000000000000000000000000000000dEaD",
+        "depositCapAssets": "10000000",
+        "depositCapUsdc": "10"
+      },
+      "explorerUrl": "https://explorer.testnet.arc.io/address/0xa70344cEeA5598B836B148B0d83b19eE988b4599"
+    },
+    "ProtectionManager": {
+      "address": "0x3e4E4A3A5A0f0fb908de6D380d817b6579FFDbF5",
+      "deployer": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+      "transactionHash": "0x043543f78ddc31ee027c556206a18b80d8cf053b728312f20e40c9e171c2f8e0",
+      "blockNumber": 63052386,
+      "blockHash": "0x385935c365bb54dd7bf89a8efdbf73d389f4d5f61d80577f4a5e8c35ead604d1",
+      "deployedAt": "2026-09-20T07:41:52Z",
+      "source": "src/ProtectionManager.sol:ProtectionManager",
+      "compiler": "0.8.30",
+      "verified": true,
+      "configuration": {
+        "assetToken": "0x3600000000000000000000000000000000000000",
+        "owner": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+        "treasury": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+        "protectionFeeAssets": "10000",
+        "protectionFeeUsdc": "0.01",
+        "maxPrincipalAssets": "2000000",
+        "maxPrincipalUsdc": "2",
+        "minDurationSeconds": 300,
+        "maxDurationSeconds": 604800,
+        "minLossLimitBps": 100,
+        "maxLossLimitBps": 5000,
+        "allowedVault": "0xa70344cEeA5598B836B148B0d83b19eE988b4599",
+        "vaultAllowlistTransactionHash": "0xd4a76a68347a8931ae7fbeff733fd60b242605edf2fad30dda0999a6efeacaee"
+      },
+      "explorerUrl": "https://explorer.testnet.arc.io/address/0x3e4E4A3A5A0f0fb908de6D380d817b6579FFDbF5"
     }
   },
   "proofs": {

@@ -42,6 +42,7 @@ Exit criteria:
 ## Milestone 2 — Contracts
 
 Target: September 23–26
+Status: Complete
 
 Deliverables:
 

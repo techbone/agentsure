@@ -32,15 +32,25 @@ The MVP proves one complete Arc-native lifecycle:
 
 ## Current status
 
-Milestones 0 and 1 are complete. The architecture is locked, the engineering foundation is tested,
-and a Circle Agent Wallet has called AgentSure's verified probe contract on Arc Testnet.
+Milestones 0, 1, and 2 are complete. The architecture is locked, the engineering foundation is
+tested, a Circle Agent Wallet has called AgentSure's verified probe contract, and the bounded V1
+protection contracts are deployed and source-verified on Arc Testnet.
 
 - npm workspace with pinned Node, npm, TypeScript, Biome, Vitest, viem, and Zod versions.
 - Official Arc Foundry toolchain installed through a checksum-verified, pinned installer.
 - Arc chain constants and unit-safe USDC helpers covered by tests.
 - Harmless `ArcCallProbe` contract compiled and tested with the Arc toolchain.
 - Circle Agent Wallet contract execution proven in a finalized, zero-value Arc Testnet transaction.
+- `ProtectionManager` and the explicitly demo-only `DemoRiskVault` deployed with small testnet caps.
+- Unit, fuzz, invariant, and adversarial contract tests cover policy lifecycle and settlement boundaries.
+- Slither static analysis is pinned and run against upstream Solidity 0.8.30 alongside Arc Foundry tests.
 - CI covers formatting, linting, type checks, tests, npm audit, and repository secret scanning.
+
+### Arc Testnet contracts
+
+- [ProtectionManager](https://explorer.testnet.arc.io/address/0x3e4E4A3A5A0f0fb908de6D380d817b6579FFDbF5): verified; 0.01 USDC fee, 2 USDC maximum principal, 5-minute to 7-day windows, and 1% to 50% downside limits.
+- [DemoRiskVault](https://explorer.testnet.arc.io/address/0xa70344cEeA5598B836B148B0d83b19eE988b4599): verified; 10 USDC deposit cap and an explicit owner-only controlled-loss mechanism for the demo.
+- [Deployment manifest](packages/contracts/deployments/arc-testnet.json): addresses, transaction proofs, caps, and owner/treasury disclosures.
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Milestones](docs/MILESTONES.md)
