@@ -47,6 +47,13 @@ export const protectionManagerAbi = [
   },
   {
     type: "function",
+    name: "nextPolicyId",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
     name: "getPolicy",
     stateMutability: "view",
     inputs: [{ name: "policyId", type: "uint256" }],

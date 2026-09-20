@@ -9,8 +9,12 @@ import { GuardianRunner } from "./runner.js";
 import { FileGuardianStateStore } from "./store.js";
 import { ViemGuardianGateway } from "./viem-gateway.js";
 
-async function main(): Promise<void> {
-  const config = loadGuardianConfig();
+export async function runGuardian(privateKeyOverride?: `0x${string}`): Promise<void> {
+  const config = loadGuardianConfig(
+    privateKeyOverride === undefined
+      ? process.env
+      : { ...process.env, GUARDIAN_PRIVATE_KEY: privateKeyOverride },
+  );
   const logger = new JsonLogger();
   const metrics = new GuardianMetrics();
   const store = new FileGuardianStateStore(config.statePath);
@@ -75,7 +79,9 @@ async function main(): Promise<void> {
   logger.info("AgentSure guardian stopped");
 }
 
-main().catch((error) => {
-  new JsonLogger().error("AgentSure guardian failed to start", { error });
-  process.exitCode = 1;
-});
+if (import.meta.url === `file://${process.argv[1]}`) {
+  runGuardian().catch((error) => {
+    new JsonLogger().error("AgentSure guardian failed to start", { error });
+    process.exitCode = 1;
+  });
+}

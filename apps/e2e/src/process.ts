@@ -1,0 +1,49 @@
+import { spawn, type ChildProcess } from "node:child_process";
+
+export async function runCaptured(
+  command: string,
+  args: string[],
+  options: { cwd: string; environment?: NodeJS.ProcessEnv },
+): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const child = spawn(command, args, {
+      cwd: options.cwd,
+      env: options.environment ?? process.env,
+      stdio: ["inherit", "pipe", "inherit"],
+    });
+    let output = "";
+    child.stdout.setEncoding("utf8");
+    child.stdout.on("data", (chunk: string) => {
+      output += chunk;
+    });
+    child.once("error", reject);
+    child.once("close", (code) => {
+      if (code === 0) {
+        resolve(output.trim());
+        return;
+      }
+      reject(new Error(`${command} exited with code ${code ?? "unknown"}`));
+    });
+  });
+}
+
+export function spawnGuardian(options: {
+  cwd: string;
+  environment: NodeJS.ProcessEnv;
+}): ChildProcess {
+  return spawn(process.execPath, ["--import", "tsx", "apps/guardian/src/keystore-main.ts"], {
+    cwd: options.cwd,
+    env: options.environment,
+    stdio: "inherit",
+  });
+}
+
+export async function stopProcess(child: ChildProcess): Promise<void> {
+  if (child.exitCode !== null) return;
+  child.kill("SIGTERM");
+  await Promise.race([
+    new Promise<void>((resolve) => child.once("close", () => resolve())),
+    new Promise<void>((resolve) => setTimeout(resolve, 5_000)),
+  ]);
+  if (child.exitCode === null) child.kill("SIGKILL");
+}

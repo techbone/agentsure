@@ -1,19 +1,16 @@
 {
-  "name": "@agentsure/guardian",
+  "name": "@agentsure/e2e",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "start:keystore": "tsx src/keystore-main.ts",
-    "start": "tsx src/main.ts",
+    "start:testnet": "tsx src/main.ts",
     "typecheck": "tsc --project tsconfig.json",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@agentsure/chain": "0.0.0",
-    "@agentsure/domain": "0.0.0",
-    "viem": "2.56.8",
-    "zod": "4.6.5"
+    "viem": "2.56.8"
   }
 }
