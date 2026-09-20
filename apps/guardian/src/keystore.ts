@@ -3,6 +3,15 @@ import { getAddress, type Address, type Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
 const PRIVATE_KEY_PATTERN = /^0x[0-9a-fA-F]{64}$/;
+const PRIVATE_KEY_IN_OUTPUT_PATTERN = /0x[0-9a-fA-F]{64}/;
+
+export function extractPrivateKey(decryptionOutput: string): Hex {
+  const privateKey = decryptionOutput.match(PRIVATE_KEY_IN_OUTPUT_PATTERN)?.[0];
+  if (privateKey === undefined || !PRIVATE_KEY_PATTERN.test(privateKey)) {
+    throw new Error("Keystore decryption did not return a valid private key");
+  }
+  return privateKey as Hex;
+}
 
 export async function decryptFoundryKeystore(options: {
   accountName: string;
@@ -10,7 +19,7 @@ export async function decryptFoundryKeystore(options: {
   expectedAddress?: Address;
   keystoreDirectory: string;
 }): Promise<Hex> {
-  const privateKey = await new Promise<string>((resolve, reject) => {
+  const decryptionOutput = await new Promise<string>((resolve, reject) => {
     const child = spawn(
       options.castBinary,
       [
@@ -37,11 +46,7 @@ export async function decryptFoundryKeystore(options: {
     });
   });
 
-  if (!PRIVATE_KEY_PATTERN.test(privateKey)) {
-    throw new Error("Keystore decryption did not return a valid private key");
-  }
-
-  const key = privateKey as Hex;
+  const key = extractPrivateKey(decryptionOutput);
   if (
     options.expectedAddress !== undefined &&
     getAddress(privateKeyToAccount(key).address) !== getAddress(options.expectedAddress)
