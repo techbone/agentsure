@@ -41,6 +41,9 @@ Use three separate roles:
 
 The guardian and web application never receive Circle credentials.
 
+Prepared mainnet guardian: `0x58E92E6AF85D2F05237B8b948Af185B5e40ab1fC`. Its encrypted
+keystore stays local and is excluded from Git.
+
 ## Read-only preparation
 
 ```bash
@@ -56,14 +59,16 @@ without a broadcast.
 ## Funding budget
 
 At the September 21, 2026 preflight gas price, the three-transaction deployment simulation estimated
-approximately `0.1965 USDC`. Fund conservatively:
+approximately `0.1965 USDC`. Start with the smallest practical balances:
 
-- deployer/admin: at least `0.35 USDC` for deployment, the controlled-loss call, and verification
-  retries;
-- dedicated guardian: at least `0.05 USDC` for the protection execution;
-- Circle Agent Wallet: at least `1.10 USDC` for 1 USDC principal, 0.01 USDC fee, and both wallet calls.
+- deployer/admin: `0.25 USDC` initially for deployment and the controlled-loss call;
+- dedicated guardian: `0.01 USDC` initially for one protection execution and a modest retry margin;
+- Circle Agent Wallet: `1.02 USDC` initially for the 1 USDC principal, 0.01 USDC fee, and a small
+  transaction margin.
 
-Re-run the simulation immediately before broadcast. Gas conditions may change.
+Do not pre-fund above these amounts. Re-run the deployment simulation and use Circle CLI transaction
+estimates immediately before each mainnet action. Top up only by the measured shortfall plus a small
+margin; gas conditions and sponsorship behavior may change.
 
 ## Broadcast and source verification
 

@@ -25,4 +25,18 @@ describe("testnet lifecycle configuration", () => {
       }),
     ).toThrow("GUARDIAN_MANAGER_ADDRESS");
   });
+
+  it("keeps the mainnet guardian funding floor at one cent", () => {
+    const config = loadLifecycleConfig({
+      AGENTSURE_AGENT_WALLET: "0x1111111111111111111111111111111111111111",
+      AGENTSURE_E2E_ACKNOWLEDGE_MAINNET: "I_UNDERSTAND",
+      AGENTSURE_E2E_NETWORK: "mainnet",
+      GUARDIAN_EXPECTED_ADDRESS: "0x58E92E6AF85D2F05237B8b948Af185B5e40ab1fC",
+      GUARDIAN_MANAGER_ADDRESS: "0x2222222222222222222222222222222222222222",
+      GUARDIAN_START_BLOCK: "1",
+      NEXT_PUBLIC_DEMO_RISK_VAULT_ADDRESS: "0x3333333333333333333333333333333333333333",
+    });
+
+    expect(config.guardianMinimumBalanceAssets).toBe(10_000n);
+  });
 });

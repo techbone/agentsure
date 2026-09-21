@@ -86,7 +86,7 @@ export function loadLifecycleConfig(environment: NodeJS.ProcessEnv = process.env
     guardianKeystoreAccount:
       environment.GUARDIAN_KEYSTORE_ACCOUNT ??
       (isMainnet ? "agentsure-mainnet-guardian" : "agentsure-testnet-guardian"),
-    guardianMinimumBalanceAssets: isMainnet ? 50_000n : 100_000n,
+    guardianMinimumBalanceAssets: isMainnet ? 10_000n : 100_000n,
     guardianStatePath: isMainnet
       ? ".data/guardian-mainnet-state.json"
       : ".data/guardian-state.json",
