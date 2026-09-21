@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #090a0a;
+  --color-ink-soft: #111310;
+  --color-paper: #f3f1e8;
+  --color-paper-dim: #cbc9bf;
+  --color-line: #292c27;
+  --color-lime: #c8ff3d;
+  --font-display: "Space Grotesk Variable", "Arial Narrow", sans-serif;
+  --font-sans: "Inter Variable", Arial, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+  --dot: rgba(243, 241, 232, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--color-lime);
+  color: var(--color-ink);
+}
+
+.dot-grid {
+  background-image: radial-gradient(circle, var(--dot) 1px, transparent 1px);
+  background-position: 0 0;
+  background-size: 22px 22px;
+}
+
+.hairline-grid {
+  background-image:
+    linear-gradient(rgba(243, 241, 232, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243, 241, 232, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.magnetic-action {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.magnetic-action:hover {
+  box-shadow: 8px 8px 0 rgba(200, 255, 61, 0.2);
+  transform: translate(-3px, -3px);
+}
+
+.scan-line {
+  animation: scan 6s linear infinite;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-120%);
+  }
+  100% {
+    transform: translateY(520%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .magnetic-action,
+  .scan-line {
+    animation: none;
+    transition: none;
+  }
+}
