@@ -1,6 +1,6 @@
 import { isAddress } from "viem";
 import { z } from "zod";
-import { parseUsdc } from "./money.js";
+import { parseUsdc } from "@agentsure/domain/money";
 
 const MIN_DURATION_SECONDS = 5 * 60;
 const MAX_DURATION_SECONDS = 30 * 24 * 60 * 60;

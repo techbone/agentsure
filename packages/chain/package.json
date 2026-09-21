@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./demo-risk-vault": "./src/demo-risk-vault.ts",
+    "./networks": "./src/networks.ts",
+    "./protection-manager": "./src/protection-manager.ts"
   },
   "scripts": {
     "typecheck": "tsc --project tsconfig.json",
