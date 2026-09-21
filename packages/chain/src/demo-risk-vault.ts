@@ -26,4 +26,18 @@ export const demoRiskVaultAbi = [
     inputs: [],
     outputs: [{ name: "", type: "uint256" }],
   },
+  {
+    type: "function",
+    name: "previewDeposit",
+    stateMutability: "view",
+    inputs: [{ name: "assets", type: "uint256" }],
+    outputs: [{ name: "shares", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "maxDeposit",
+    stateMutability: "view",
+    inputs: [{ name: "receiver", type: "address" }],
+    outputs: [{ name: "maxAssets", type: "uint256" }],
+  },
 ] as const;

@@ -63,7 +63,7 @@ export default function HomePage() {
                 className="magnetic-action flex w-fit items-center gap-14 bg-lime px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-ink"
                 href="#console"
               >
-                Inspect the proof <ArrowDown className="size-4" aria-hidden="true" />
+                Configure protection <ArrowDown className="size-4" aria-hidden="true" />
               </a>
             </div>
 
@@ -135,6 +135,26 @@ export default function HomePage() {
               Watch the chain.
             </h2>
           </div>
+
+          <ol className="mb-5 grid border border-paper/15 sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              ["01", "Define boundary", "Principal, downside, window"],
+              ["02", "MPC confirms", "Two bounded wallet calls"],
+              ["03", "Guardian watches", "Finalized Arc state only"],
+              ["04", "USDC returns", "Direct to beneficiary"],
+            ].map(([number, title, detail], index) => (
+              <li
+                className={`min-h-36 p-5 ${index < 3 ? "xl:border-r xl:border-paper/15" : ""} ${
+                  index % 2 === 0 ? "sm:border-r sm:border-paper/15" : ""
+                } ${index > 1 ? "border-t border-paper/15 xl:border-t-0" : ""}`}
+                key={number}
+              >
+                <span className="font-mono text-[9px] text-lime">{number}</span>
+                <p className="mt-7 text-xs font-semibold uppercase tracking-[0.12em]">{title}</p>
+                <p className="mt-2 text-[11px] leading-5 text-paper/40">{detail}</p>
+              </li>
+            ))}
+          </ol>
 
           <div className="grid gap-5 xl:grid-cols-[1.16fr_0.84fr]">
             <PolicyBuilder

@@ -7,7 +7,7 @@
     "build": "next build --webpack",
     "dev": "next dev",
     "start": "next start",
-    "typecheck": "tsc --project tsconfig.json",
+    "typecheck": "next typegen && tsc --project tsconfig.json",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
