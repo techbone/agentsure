@@ -17,7 +17,7 @@ import {
   type Hex,
 } from "viem";
 
-const ENTRY_SLIPPAGE_BPS = 100n;
+export const ENTRY_SLIPPAGE_BPS = 100n;
 
 export class PolicyPlanError extends Error {
   readonly code: string;

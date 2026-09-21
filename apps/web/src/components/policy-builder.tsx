@@ -2,6 +2,7 @@
 
 import { calculateTriggerAssets, formatUsdc, parseUsdc } from "@agentsure/domain/money";
 import { policyIntentSchema } from "@agentsure/domain/policy";
+import type { PolicyExecutionPlan } from "@agentsure/protection/policy-plan";
 import {
   ArrowUpRight,
   Check,
@@ -13,7 +14,6 @@ import {
 } from "lucide-react";
 import { type FormEvent, useMemo, useState } from "react";
 import { compactAddress, displayDuration, displayUsdc } from "@/lib/display";
-import type { PolicyExecutionPlan } from "@/lib/policy-plan";
 
 const ESTIMATED_PROTECTION_FEE = 10_000n;
 

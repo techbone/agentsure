@@ -42,7 +42,7 @@ const intent = {
   vault: deployment.vault,
 };
 
-describe("policy execution plan", () => {
+describe("AgentSure policy execution plan", () => {
   it("encodes exact bounded Circle Agent Wallet calls", () => {
     const plan = createPolicyExecutionPlan({ deployment, intent, onchain });
     const approval = decodeFunctionData({ abi: erc20Abi, data: plan.steps[0].calldata });

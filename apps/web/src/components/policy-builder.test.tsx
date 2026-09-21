@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { PolicyExecutionPlan } from "@/lib/policy-plan";
+import type { PolicyExecutionPlan } from "@agentsure/protection/policy-plan";
 import { PolicyBuilder } from "./policy-builder.js";
 
 const WALLET = "0x218b80d3bCDaB79C66ee24AA15A3c8e2527f5E21";

@@ -4,10 +4,10 @@ import { demoRiskVaultAbi } from "@agentsure/chain/demo-risk-vault";
 import { protectionManagerAbi } from "@agentsure/chain/protection-manager";
 import { parseUsdc } from "@agentsure/domain/money";
 import { policyIntentSchema } from "@agentsure/domain/policy";
+import { createPolicyExecutionPlan, PolicyPlanError } from "@agentsure/protection/policy-plan";
 import { NextResponse } from "next/server";
 import { createPublicClient, erc20Abi, getAddress, http, isAddressEqual, type Address } from "viem";
 import { arcTestnet } from "viem/chains";
-import { createPolicyExecutionPlan, PolicyPlanError } from "@/lib/policy-plan";
 
 export const dynamic = "force-dynamic";
 

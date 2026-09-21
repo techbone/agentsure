@@ -1,0 +1,20 @@
+{
+  "name": "@agentsure/protection",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./policy-plan": "./src/policy-plan.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@agentsure/chain": "0.0.0",
+    "@agentsure/domain": "0.0.0",
+    "viem": "2.56.8"
+  }
+}
