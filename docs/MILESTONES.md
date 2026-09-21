@@ -83,10 +83,11 @@ Exit criteria:
 ## Milestone 4 — End-to-end testnet proof
 
 Target: September 30–October 2
+Status: Complete
 
 Deliverables:
 
-- Circle Agent Wallet policy and contract allowlist configuration.
+- Exact Circle Agent Wallet USDC allowance and contract vault allowlist configuration.
 - Real testnet USDC policy creation.
 - Controlled loss event.
 - Automatic exit and beneficiary receipt.
@@ -97,6 +98,17 @@ Exit criteria:
 - One command/script reproduces the complete lifecycle.
 - All transaction hashes and state transitions reconcile.
 - Failure and recovery runbooks have been exercised once.
+
+Evidence:
+
+- Policy `#1` opened from the Circle Agent Wallet with `1 USDC` principal and a `0.01 USDC` fee.
+- A controlled `0.0325 USDC` loss crossed the `0.97 USDC` trigger.
+- The dedicated guardian executed the protection transaction and returned `0.9675 USDC` directly
+  to the Circle Agent Wallet beneficiary.
+- Public-RPC throttling and a terminal interruption were both recovered from without duplicating the
+  policy, charging a second fee, or losing the durable event cursor.
+- Transaction hashes, block hashes, balance deltas, and final state are preserved in
+  `docs/evidence/arc-testnet-lifecycle.json`.
 
 ## Milestone 5 — Product surface
 

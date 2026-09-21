@@ -32,10 +32,10 @@ The MVP proves one complete Arc-native lifecycle:
 
 ## Current status
 
-Milestones 0 through 3 are complete. The architecture is locked, the engineering foundation is
-tested, a Circle Agent Wallet has called AgentSure's verified probe contract, the bounded V1
-protection contracts are deployed and source-verified on Arc Testnet, and the independent guardian
-is restart-safe and ready for the end-to-end testnet proof.
+Milestones 0 through 4 are complete. The architecture is locked, the engineering foundation is
+tested, the bounded V1 contracts are source-verified on Arc Testnet, and a Circle Agent Wallet has
+completed a protected lifecycle in which the independent guardian automatically exited a breached
+position and returned the remaining USDC to the wallet.
 
 - npm workspace with pinned Node, npm, TypeScript, Biome, Vitest, viem, and Zod versions.
 - Official Arc Foundry toolchain installed through a checksum-verified, pinned installer.
@@ -50,6 +50,8 @@ is restart-safe and ready for the end-to-end testnet proof.
   before its dedicated keeper submits a transaction.
 - Pending transactions are reconciled after restart without a duplicate submission, while structured
   logs, liveness, readiness, and Prometheus metrics expose operating state.
+- An interruption-safe testnet runner reproduced approval, policy creation, a controlled 3.25% loss,
+  automatic execution, direct beneficiary settlement, and a fully emptied vault.
 - CI covers formatting, linting, type checks, tests, npm audit, and repository secret scanning.
 
 ### Arc Testnet contracts
@@ -58,12 +60,25 @@ is restart-safe and ready for the end-to-end testnet proof.
 - [DemoRiskVault](https://explorer.testnet.arc.io/address/0xa70344cEeA5598B836B148B0d83b19eE988b4599): verified; 10 USDC deposit cap and an explicit owner-only controlled-loss mechanism for the demo.
 - [Deployment manifest](packages/contracts/deployments/arc-testnet.json): addresses, transaction proofs, caps, and owner/treasury disclosures.
 
+### Arc Testnet protected lifecycle
+
+Policy `#1` protected a `1 USDC` position with a `3%` downside trigger. After a controlled `3.25%`
+loss reduced its value to `0.9675 USDC`, the dedicated AgentSure guardian executed the exit and the
+contract returned all `0.9675 USDC` directly to the Circle Agent Wallet beneficiary.
+
+- [Circle Agent Wallet approval](https://explorer.testnet.arc.io/tx/0x6d99c8465ed16c1fcca2a88a32a39740c7149f00291dd7d9bc7d8c21bf79fce1)
+- [Protected policy opened](https://explorer.testnet.arc.io/tx/0xb81e0c4c93d0d6db446350a70bc98f53dd3bb12dc8960fd58356f77d11a207e6)
+- [Controlled loss](https://explorer.testnet.arc.io/tx/0xa6585bcab8a8d8ba1fb9dd240b20892df6a978b544d24c0cb6c82f4c4140a6ef)
+- [Autonomous protection execution](https://explorer.testnet.arc.io/tx/0x620a51c4bb872d3739cb85df22ef6ffe29a9f306dd82303c9162c50bdcd41297)
+- [Machine-readable lifecycle evidence](docs/evidence/arc-testnet-lifecycle.json)
+
 - [Architecture](docs/ARCHITECTURE.md)
 - [Milestones](docs/MILESTONES.md)
 - [ADR-0001: Protect at entry](docs/adr/0001-protect-at-entry.md)
 - [ADR-0002: Separate permissionless guardian](docs/adr/0002-separate-permissionless-guardian.md)
 - [Circle Agent Wallet proof runbook](docs/runbooks/CIRCLE_WALLET_PROOF.md)
 - [Guardian operations runbook](docs/runbooks/GUARDIAN.md)
+- [Testnet lifecycle and recovery runbook](docs/runbooks/TESTNET_LIFECYCLE.md)
 
 ## Official references
 
