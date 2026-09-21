@@ -113,6 +113,7 @@ Evidence:
 ## Milestone 5 — Product surface
 
 Target: October 3–5
+Status: Complete
 
 Deliverables:
 
@@ -127,6 +128,17 @@ Exit criteria:
 - A reviewer can understand the product and verify the full flow without reading code.
 - The interface never presents offchain data as authoritative.
 - Loading, empty, degraded, and failed-execution states are visible.
+
+Evidence:
+
+- The policy builder validates a bounded intent against finalized Arc state before presenting any
+  wallet action.
+- The resulting handoff contains exact USDC approval and policy-opening calldata for Circle's MPC
+  Agent Wallet; the browser never receives credentials and never signs a transaction.
+- The live policy monitor and explorer-linked proof timeline read Arc as the authority and expose
+  loading, healthy, degraded, and completed states.
+- Product copy explicitly distinguishes automatic exit from insurance or loss reimbursement.
+- Desktop and mobile layouts expose the full lifecycle: define, confirm, monitor, and settle.
 
 ## Milestone 6 — Mainnet deployment
 

@@ -32,10 +32,10 @@ The MVP proves one complete Arc-native lifecycle:
 
 ## Current status
 
-Milestones 0 through 4 are complete. The architecture is locked, the engineering foundation is
-tested, the bounded V1 contracts are source-verified on Arc Testnet, and a Circle Agent Wallet has
-completed a protected lifecycle in which the independent guardian automatically exited a breached
-position and returned the remaining USDC to the wallet.
+Milestones 0 through 5 are complete. The architecture is locked, the engineering foundation is
+tested, the bounded V1 contracts are source-verified on Arc Testnet, a Circle Agent Wallet has
+completed a protected lifecycle, and the reviewer-facing product surface turns that engineering
+into a live, verifiable policy flow.
 
 - npm workspace with pinned Node, npm, TypeScript, Biome, Vitest, viem, and Zod versions.
 - Official Arc Foundry toolchain installed through a checksum-verified, pinned installer.
@@ -52,7 +52,21 @@ position and returned the remaining USDC to the wallet.
   logs, liveness, readiness, and Prometheus metrics expose operating state.
 - An interruption-safe testnet runner reproduced approval, policy creation, a controlled 3.25% loss,
   automatic execution, direct beneficiary settlement, and a fully emptied vault.
+- The responsive product console prepares a bounded policy against finalized Arc state, emits exact
+  Circle Agent Wallet calldata without browser custody, monitors live policy state, and links every
+  lifecycle proof to the Arc explorer.
 - CI covers formatting, linting, type checks, tests, npm audit, and repository secret scanning.
+
+### Run the product locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). Preparing an Agent Wallet handoff is read-only:
+it verifies live Arc Testnet state and returns exact bounded calls, but it does not sign or submit a
+transaction.
 
 ### Arc Testnet contracts
 
@@ -76,6 +90,7 @@ contract returned all `0.9675 USDC` directly to the Circle Agent Wallet benefici
 - [Milestones](docs/MILESTONES.md)
 - [ADR-0001: Protect at entry](docs/adr/0001-protect-at-entry.md)
 - [ADR-0002: Separate permissionless guardian](docs/adr/0002-separate-permissionless-guardian.md)
+- [ADR-0003: Prepare Agent Wallet intents without browser custody](docs/adr/0003-prepare-wallet-intents-server-side.md)
 - [Circle Agent Wallet proof runbook](docs/runbooks/CIRCLE_WALLET_PROOF.md)
 - [Guardian operations runbook](docs/runbooks/GUARDIAN.md)
 - [Testnet lifecycle and recovery runbook](docs/runbooks/TESTNET_LIFECYCLE.md)
