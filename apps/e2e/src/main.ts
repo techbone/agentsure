@@ -12,16 +12,12 @@ import {
   type Hash,
   type TransactionReceipt,
 } from "viem";
-import { arcTestnet } from "viem/chains";
 import { reverseBlockRanges } from "./block-ranges.js";
-import { loadTestnetLifecycleConfig } from "./config.js";
+import { loadLifecycleConfig } from "./config.js";
 import { requireTransactionHash, serializeEvidence } from "./evidence.js";
 import { runCaptured, spawnGuardian, stopProcess } from "./process.js";
 
 const PROTECTION_FEE_ASSETS = 10_000n;
-const MANAGER_DEPLOYMENT_BLOCK = 63_052_386n;
-const TREASURY_ADDRESS = getAddress("0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5");
-const LOSS_SINK_ADDRESS = getAddress("0x000000000000000000000000000000000000dEaD");
 
 async function waitForGuardian(url: string, timeoutMs: number): Promise<void> {
   const deadline = Date.now() + timeoutMs;
@@ -48,8 +44,8 @@ async function writeEvidence(path: string, evidence: unknown): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  const config = loadTestnetLifecycleConfig();
-  const client = createPublicClient({ chain: arcTestnet, transport: http(config.rpcUrl) });
+  const config = loadLifecycleConfig();
+  const client = createPublicClient({ chain: config.chain, transport: http(config.rpcUrl) });
   const balanceOf = (address: Address, blockNumber?: bigint) =>
     client.readContract({
       address: config.usdcAddress,
@@ -74,8 +70,8 @@ async function main(): Promise<void> {
     }),
     balanceOf(config.agentWallet),
     balanceOf(config.guardianAddress),
-    balanceOf(TREASURY_ADDRESS),
-    balanceOf(LOSS_SINK_ADDRESS),
+    balanceOf(config.treasuryAddress),
+    balanceOf(config.lossSinkAddress),
     client.readContract({
       address: config.vaultAddress,
       abi: demoRiskVaultAbi,
@@ -83,8 +79,10 @@ async function main(): Promise<void> {
     }),
   ]);
 
-  if (keeperBalanceCurrent < 100_000n) {
-    throw new Error("Guardian needs at least 0.1 testnet USDC for execution gas");
+  if (keeperBalanceCurrent < config.guardianMinimumBalanceAssets) {
+    throw new Error(
+      `Guardian needs at least ${config.guardianMinimumBalanceAssets} ERC-20 micro-USDC units for execution gas`,
+    );
   }
 
   let resumablePolicyId: bigint | null = null;
@@ -132,13 +130,13 @@ async function main(): Promise<void> {
     cwd: config.repositoryRoot,
     environment: {
       ...process.env,
-      ARC_TESTNET_RPC_URL: config.rpcUrl,
-      GUARDIAN_CHAIN_ID: "5042002",
+      [config.rpcEnvironmentKey]: config.rpcUrl,
+      GUARDIAN_CHAIN_ID: config.chain.id.toString(),
       GUARDIAN_EXPECTED_ADDRESS: config.guardianAddress,
       GUARDIAN_KEYSTORE_ACCOUNT: config.guardianKeystoreAccount,
       GUARDIAN_MANAGER_ADDRESS: config.managerAddress,
-      GUARDIAN_START_BLOCK: "63052386",
-      GUARDIAN_STATE_PATH: ".data/guardian-state.json",
+      GUARDIAN_START_BLOCK: config.deploymentBlock.toString(),
+      GUARDIAN_STATE_PATH: config.guardianStatePath,
     },
   });
 
@@ -177,7 +175,7 @@ async function main(): Promise<void> {
           "--address",
           config.agentWallet,
           "--chain",
-          "ARC-TESTNET",
+          config.circleChain,
           "--output",
           "json",
         ],
@@ -205,7 +203,7 @@ async function main(): Promise<void> {
           "--address",
           config.agentWallet,
           "--chain",
-          "ARC-TESTNET",
+          config.circleChain,
           "--output",
           "json",
         ],
@@ -216,7 +214,7 @@ async function main(): Promise<void> {
       if (openReceipt.status !== "success") throw new Error("Policy opening reverted");
       [walletBalanceAfterOpen, treasuryBalanceAfterOpen] = await Promise.all([
         balanceOf(config.agentWallet),
-        balanceOf(TREASURY_ADDRESS),
+        balanceOf(config.treasuryAddress),
       ]);
     } else {
       policyId = resumablePolicyId;
@@ -224,7 +222,7 @@ async function main(): Promise<void> {
       const openedEvent = getAbiItem({ abi: protectionManagerAbi, name: "PolicyOpened" });
       const latestBlock = await client.getBlockNumber();
       let recoveredOpenTransactionHash: Hash | null = null;
-      for (const range of reverseBlockRanges(MANAGER_DEPLOYMENT_BLOCK, latestBlock, 2_000n)) {
+      for (const range of reverseBlockRanges(config.deploymentBlock, latestBlock, 2_000n)) {
         const openedLogs = await client.getLogs({
           address: config.managerAddress,
           event: openedEvent,
@@ -274,10 +272,10 @@ async function main(): Promise<void> {
       ] = await Promise.all([
         balanceOf(config.agentWallet, beforeOpenBlock),
         balanceOf(config.guardianAddress, beforeOpenBlock),
-        balanceOf(TREASURY_ADDRESS, beforeOpenBlock),
-        balanceOf(LOSS_SINK_ADDRESS, beforeOpenBlock),
+        balanceOf(config.treasuryAddress, beforeOpenBlock),
+        balanceOf(config.lossSinkAddress, beforeOpenBlock),
         balanceOf(config.agentWallet, openReceipt.blockNumber),
-        balanceOf(TREASURY_ADDRESS, openReceipt.blockNumber),
+        balanceOf(config.treasuryAddress, openReceipt.blockNumber),
       ]);
       console.log(`Recovered approval and opening proofs. Continuing policy #${policyId}.`);
     }
@@ -392,7 +390,7 @@ async function main(): Promise<void> {
       await Promise.all([
         balanceOf(config.agentWallet),
         balanceOf(config.guardianAddress),
-        balanceOf(LOSS_SINK_ADDRESS),
+        balanceOf(config.lossSinkAddress),
         client.readContract({
           address: config.vaultAddress,
           abi: demoRiskVaultAbi,
@@ -415,14 +413,14 @@ async function main(): Promise<void> {
 
     const evidence = serializeEvidence({
       schemaVersion: 1,
-      network: "Arc Testnet",
-      chainId: arcTestnet.id,
+      network: config.network,
+      chainId: config.chain.id,
       completedAt: new Date().toISOString(),
       participants: {
         circleAgentWallet: config.agentWallet,
         guardian: config.guardianAddress,
-        treasury: TREASURY_ADDRESS,
-        lossSink: LOSS_SINK_ADDRESS,
+        treasury: config.treasuryAddress,
+        lossSink: config.lossSinkAddress,
       },
       contracts: {
         usdc: config.usdcAddress,

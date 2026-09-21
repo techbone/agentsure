@@ -69,3 +69,18 @@ The testnet configuration is deliberately bounded: 0.01 USDC fee, 2 USDC maximum
 principal, 10 USDC vault cap, 5-minute to 7-day windows, and 1% to 50% loss limits. The demo
 vault transfers a controlled loss to the disclosed burn address; it is not a yield product or a
 production vault.
+
+## Prepare the capped Arc Mainnet deployment
+
+The mainnet script uses the same audited contract bytecode with stricter immutable exposure: a
+maximum `1 USDC` policy and a system-wide `1 USDC` demo-vault cap.
+
+```sh
+npm run contracts:simulate:protection:mainnet
+npm run contracts:deploy:protection:mainnet
+```
+
+The first command is read-only. The second uses an encrypted Foundry keystore, broadcasts three
+transactions, and submits both contracts for Blockscout source verification. Follow the
+[mainnet deployment runbook](../../docs/runbooks/MAINNET_DEPLOYMENT.md) before funding or
+broadcasting.

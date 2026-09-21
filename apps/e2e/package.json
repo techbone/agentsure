@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start:mainnet": "AGENTSURE_E2E_NETWORK=mainnet tsx src/main.ts",
     "start:testnet": "tsx src/main.ts",
     "typecheck": "tsc --project tsconfig.json",
     "test": "vitest run",

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { loadTestnetLifecycleConfig } from "./config.js";
+import { loadLifecycleConfig, loadTestnetLifecycleConfig } from "./config.js";
 
 describe("testnet lifecycle configuration", () => {
   it("uses the capped one-USDC demonstration terms", () => {
@@ -14,5 +14,15 @@ describe("testnet lifecycle configuration", () => {
 
   it("accepts only valid override addresses", () => {
     expect(() => loadTestnetLifecycleConfig({ AGENTSURE_AGENT_WALLET: "invalid" })).toThrow();
+  });
+
+  it("requires explicit acknowledgement and addresses for mainnet", () => {
+    expect(() => loadLifecycleConfig({ AGENTSURE_E2E_NETWORK: "mainnet" })).toThrow("I_UNDERSTAND");
+    expect(() =>
+      loadLifecycleConfig({
+        AGENTSURE_E2E_ACKNOWLEDGE_MAINNET: "I_UNDERSTAND",
+        AGENTSURE_E2E_NETWORK: "mainnet",
+      }),
+    ).toThrow("GUARDIAN_MANAGER_ADDRESS");
   });
 });
