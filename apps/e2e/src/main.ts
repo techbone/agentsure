@@ -13,6 +13,7 @@ import {
   type TransactionReceipt,
 } from "viem";
 import { arcTestnet } from "viem/chains";
+import { reverseBlockRanges } from "./block-ranges.js";
 import { loadTestnetLifecycleConfig } from "./config.js";
 import { requireTransactionHash, serializeEvidence } from "./evidence.js";
 import { runCaptured, spawnGuardian, stopProcess } from "./process.js";
@@ -221,19 +222,27 @@ async function main(): Promise<void> {
       policyId = resumablePolicyId;
       console.log(`Guardian is ready. Recovering the onchain proof for policy #${policyId}.`);
       const openedEvent = getAbiItem({ abi: protectionManagerAbi, name: "PolicyOpened" });
-      const openedLogs = await client.getLogs({
-        address: config.managerAddress,
-        event: openedEvent,
-        args: { policyId },
-        fromBlock: MANAGER_DEPLOYMENT_BLOCK,
-        toBlock: "latest",
-        strict: true,
-      });
-      const openedLog = openedLogs.at(-1);
-      if (openedLog?.transactionHash === null || openedLog?.transactionHash === undefined) {
+      const latestBlock = await client.getBlockNumber();
+      let recoveredOpenTransactionHash: Hash | null = null;
+      for (const range of reverseBlockRanges(MANAGER_DEPLOYMENT_BLOCK, latestBlock, 2_000n)) {
+        const openedLogs = await client.getLogs({
+          address: config.managerAddress,
+          event: openedEvent,
+          args: { policyId },
+          fromBlock: range.fromBlock,
+          toBlock: range.toBlock,
+          strict: true,
+        });
+        const candidate = openedLogs.at(-1)?.transactionHash;
+        if (candidate !== null && candidate !== undefined) {
+          recoveredOpenTransactionHash = candidate;
+          break;
+        }
+      }
+      if (recoveredOpenTransactionHash === null) {
         throw new Error(`PolicyOpened proof was not found for policy ${policyId}`);
       }
-      openTransactionHash = openedLog.transactionHash;
+      openTransactionHash = recoveredOpenTransactionHash;
       openReceipt = await client.getTransactionReceipt({ hash: openTransactionHash });
 
       const approvalEvent = getAbiItem({ abi: erc20Abi, name: "Approval" });
@@ -364,7 +373,7 @@ async function main(): Promise<void> {
       address: config.managerAddress,
       event: executionEvent,
       args: { policyId },
-      fromBlock: openReceipt.blockNumber,
+      fromBlock: lossReceipt.blockNumber,
       toBlock: "latest",
       strict: true,
     });
