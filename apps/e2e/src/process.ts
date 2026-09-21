@@ -1,5 +1,14 @@
 import { spawn, type ChildProcess } from "node:child_process";
 
+export function shouldForwardGuardianLine(line: string): boolean {
+  try {
+    const value = JSON.parse(line) as { level?: unknown };
+    return value.level !== "debug";
+  } catch {
+    return true;
+  }
+}
+
 export async function runCaptured(
   command: string,
   args: string[],
@@ -31,11 +40,27 @@ export function spawnGuardian(options: {
   cwd: string;
   environment: NodeJS.ProcessEnv;
 }): ChildProcess {
-  return spawn(process.execPath, ["--import", "tsx", "apps/guardian/src/keystore-main.ts"], {
+  const child = spawn(process.execPath, ["--import", "tsx", "apps/guardian/src/keystore-main.ts"], {
     cwd: options.cwd,
     env: options.environment,
-    stdio: "inherit",
+    stdio: ["inherit", "pipe", "inherit"],
   });
+  let buffered = "";
+  child.stdout?.setEncoding("utf8");
+  child.stdout?.on("data", (chunk: string) => {
+    buffered += chunk;
+    const lines = buffered.split("\n");
+    buffered = lines.pop() ?? "";
+    for (const line of lines) {
+      if (shouldForwardGuardianLine(line)) process.stdout.write(`${line}\n`);
+    }
+  });
+  child.stdout?.on("close", () => {
+    if (buffered.length > 0 && shouldForwardGuardianLine(buffered)) {
+      process.stdout.write(`${buffered}\n`);
+    }
+  });
+  return child;
 }
 
 export async function stopProcess(child: ChildProcess): Promise<void> {

@@ -9,6 +9,8 @@ import {
   getAddress,
   http,
   type Address,
+  type Hash,
+  type TransactionReceipt,
 } from "viem";
 import { arcTestnet } from "viem/chains";
 import { loadTestnetLifecycleConfig } from "./config.js";
@@ -16,6 +18,7 @@ import { requireTransactionHash, serializeEvidence } from "./evidence.js";
 import { runCaptured, spawnGuardian, stopProcess } from "./process.js";
 
 const PROTECTION_FEE_ASSETS = 10_000n;
+const MANAGER_DEPLOYMENT_BLOCK = 63_052_386n;
 const TREASURY_ADDRESS = getAddress("0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5");
 const LOSS_SINK_ADDRESS = getAddress("0x000000000000000000000000000000000000dEaD");
 
@@ -46,21 +49,22 @@ async function writeEvidence(path: string, evidence: unknown): Promise<void> {
 async function main(): Promise<void> {
   const config = loadTestnetLifecycleConfig();
   const client = createPublicClient({ chain: arcTestnet, transport: http(config.rpcUrl) });
-  const balanceOf = (address: Address) =>
+  const balanceOf = (address: Address, blockNumber?: bigint) =>
     client.readContract({
       address: config.usdcAddress,
       abi: erc20Abi,
       functionName: "balanceOf",
       args: [address],
+      ...(blockNumber === undefined ? {} : { blockNumber }),
     });
 
   const [
-    policyId,
-    walletBalanceBefore,
-    keeperBalanceBefore,
-    treasuryBalanceBefore,
-    lossSinkBalanceBefore,
-    vaultAssetsBefore,
+    nextPolicyId,
+    walletBalanceCurrent,
+    keeperBalanceCurrent,
+    treasuryBalanceCurrent,
+    lossSinkBalanceCurrent,
+    vaultAssetsCurrent,
   ] = await Promise.all([
     client.readContract({
       address: config.managerAddress,
@@ -78,17 +82,12 @@ async function main(): Promise<void> {
     }),
   ]);
 
-  if (walletBalanceBefore < config.principalAssets + PROTECTION_FEE_ASSETS) {
-    throw new Error("Agent Wallet does not have enough USDC for principal and protection fee");
-  }
-  if (keeperBalanceBefore < 100_000n) {
+  if (keeperBalanceCurrent < 100_000n) {
     throw new Error("Guardian needs at least 0.1 testnet USDC for execution gas");
   }
-  if (vaultAssetsBefore !== 0n) {
-    throw new Error("Demo vault must be empty before starting a deterministic lifecycle run");
-  }
 
-  for (let existingPolicyId = 1n; existingPolicyId < policyId; existingPolicyId += 1n) {
+  let resumablePolicyId: bigint | null = null;
+  for (let existingPolicyId = 1n; existingPolicyId < nextPolicyId; existingPolicyId += 1n) {
     const existingPolicy = await client.readContract({
       address: config.managerAddress,
       abi: protectionManagerAbi,
@@ -96,12 +95,38 @@ async function main(): Promise<void> {
       args: [existingPolicyId],
     });
     if (existingPolicy.status === 0 && getAddress(existingPolicy.owner) === config.agentWallet) {
-      throw new Error(`Agent Wallet already has active policy ${existingPolicyId}`);
+      if (resumablePolicyId !== null) {
+        throw new Error("Agent Wallet has multiple active policies; refusing an ambiguous resume");
+      }
+      if (
+        getAddress(existingPolicy.beneficiary) !== config.agentWallet ||
+        getAddress(existingPolicy.vault) !== config.vaultAddress ||
+        existingPolicy.principalAssets !== config.principalAssets ||
+        existingPolicy.lossLimitBps !== config.lossLimitBps
+      ) {
+        throw new Error(`Active policy ${existingPolicyId} does not match the demonstration terms`);
+      }
+      resumablePolicyId = existingPolicyId;
     }
   }
 
-  console.log("Preflight passed. Starting the dedicated guardian.");
-  console.log("Enter the guardian keystore password at the hidden prompt.");
+  if (resumablePolicyId === null) {
+    if (walletBalanceCurrent < config.principalAssets + PROTECTION_FEE_ASSETS) {
+      throw new Error("Agent Wallet does not have enough USDC for principal and protection fee");
+    }
+    if (vaultAssetsCurrent !== 0n) {
+      throw new Error("Demo vault must be empty before starting a deterministic lifecycle run");
+    }
+  } else if (vaultAssetsCurrent !== config.principalAssets) {
+    throw new Error("Resumable policy value changed before the controlled-loss step");
+  }
+
+  console.log(
+    resumablePolicyId === null
+      ? "Preflight passed. Starting a new protected lifecycle."
+      : `Preflight passed. Resuming active policy #${resumablePolicyId} without another fee.`,
+  );
+  console.log("Enter the guardian keystore password when prompted (input stays invisible).");
   const guardian = spawnGuardian({
     cwd: config.repositoryRoot,
     environment: {
@@ -118,60 +143,135 @@ async function main(): Promise<void> {
 
   try {
     await waitForGuardian(config.guardianHealthUrl, 90_000);
-    console.log("Guardian is ready. Submitting exact Circle Agent Wallet approval.");
+    let policyId: bigint;
+    let approvalTransactionHash: Hash;
+    let approvalReceipt: TransactionReceipt;
+    let openTransactionHash: Hash;
+    let openReceipt: TransactionReceipt;
+    let walletBalanceBefore: bigint;
+    let keeperBalanceBefore: bigint;
+    let treasuryBalanceBefore: bigint;
+    let lossSinkBalanceBefore: bigint;
+    let walletBalanceAfterOpen: bigint;
+    let treasuryBalanceAfterOpen: bigint;
 
-    const approvalOutput = await runCaptured(
-      config.circleBinary,
-      [
-        "wallet",
-        "execute",
-        "approve(address,uint256)",
-        config.managerAddress,
-        (config.principalAssets + PROTECTION_FEE_ASSETS).toString(),
-        "--contract",
-        config.usdcAddress,
-        "--address",
-        config.agentWallet,
-        "--chain",
-        "ARC-TESTNET",
-        "--output",
-        "json",
-      ],
-      { cwd: config.repositoryRoot },
-    );
-    const approvalTransactionHash = requireTransactionHash(approvalOutput, "USDC approval");
-    const approvalReceipt = await client.waitForTransactionReceipt({
-      hash: approvalTransactionHash,
-    });
-    if (approvalReceipt.status !== "success") throw new Error("USDC approval reverted");
+    if (resumablePolicyId === null) {
+      policyId = nextPolicyId;
+      walletBalanceBefore = walletBalanceCurrent;
+      keeperBalanceBefore = keeperBalanceCurrent;
+      treasuryBalanceBefore = treasuryBalanceCurrent;
+      lossSinkBalanceBefore = lossSinkBalanceCurrent;
 
-    console.log("Approval finalized. Opening the 1 USDC protection policy.");
-    const openOutput = await runCaptured(
-      config.circleBinary,
+      console.log("Guardian is ready. Submitting exact Circle Agent Wallet approval.");
+      const approvalOutput = await runCaptured(
+        config.circleBinary,
+        [
+          "wallet",
+          "execute",
+          "approve(address,uint256)",
+          config.managerAddress,
+          (config.principalAssets + PROTECTION_FEE_ASSETS).toString(),
+          "--contract",
+          config.usdcAddress,
+          "--address",
+          config.agentWallet,
+          "--chain",
+          "ARC-TESTNET",
+          "--output",
+          "json",
+        ],
+        { cwd: config.repositoryRoot },
+      );
+      approvalTransactionHash = requireTransactionHash(approvalOutput, "USDC approval");
+      approvalReceipt = await client.waitForTransactionReceipt({ hash: approvalTransactionHash });
+      if (approvalReceipt.status !== "success") throw new Error("USDC approval reverted");
+
+      console.log("Approval finalized. Opening the 1 USDC protection policy.");
+      const openOutput = await runCaptured(
+        config.circleBinary,
+        [
+          "wallet",
+          "execute",
+          "openPolicy(address,address,uint256,uint16,uint64,uint256)",
+          config.vaultAddress,
+          config.agentWallet,
+          config.principalAssets.toString(),
+          config.lossLimitBps.toString(),
+          config.durationSeconds.toString(),
+          config.minimumShares.toString(),
+          "--contract",
+          config.managerAddress,
+          "--address",
+          config.agentWallet,
+          "--chain",
+          "ARC-TESTNET",
+          "--output",
+          "json",
+        ],
+        { cwd: config.repositoryRoot },
+      );
+      openTransactionHash = requireTransactionHash(openOutput, "Policy opening");
+      openReceipt = await client.waitForTransactionReceipt({ hash: openTransactionHash });
+      if (openReceipt.status !== "success") throw new Error("Policy opening reverted");
+      [walletBalanceAfterOpen, treasuryBalanceAfterOpen] = await Promise.all([
+        balanceOf(config.agentWallet),
+        balanceOf(TREASURY_ADDRESS),
+      ]);
+    } else {
+      policyId = resumablePolicyId;
+      console.log(`Guardian is ready. Recovering the onchain proof for policy #${policyId}.`);
+      const openedEvent = getAbiItem({ abi: protectionManagerAbi, name: "PolicyOpened" });
+      const openedLogs = await client.getLogs({
+        address: config.managerAddress,
+        event: openedEvent,
+        args: { policyId },
+        fromBlock: MANAGER_DEPLOYMENT_BLOCK,
+        toBlock: "latest",
+        strict: true,
+      });
+      const openedLog = openedLogs.at(-1);
+      if (openedLog?.transactionHash === null || openedLog?.transactionHash === undefined) {
+        throw new Error(`PolicyOpened proof was not found for policy ${policyId}`);
+      }
+      openTransactionHash = openedLog.transactionHash;
+      openReceipt = await client.getTransactionReceipt({ hash: openTransactionHash });
+
+      const approvalEvent = getAbiItem({ abi: erc20Abi, name: "Approval" });
+      const approvalLogs = await client.getLogs({
+        address: config.usdcAddress,
+        event: approvalEvent,
+        args: { owner: config.agentWallet, spender: config.managerAddress },
+        fromBlock: openReceipt.blockNumber > 2_000n ? openReceipt.blockNumber - 2_000n : 0n,
+        toBlock: openReceipt.blockNumber,
+        strict: true,
+      });
+      const approvalLog = approvalLogs
+        .filter((log) => log.args.value === config.principalAssets + PROTECTION_FEE_ASSETS)
+        .at(-1);
+      if (approvalLog?.transactionHash === null || approvalLog?.transactionHash === undefined) {
+        throw new Error(`USDC approval proof was not found for policy ${policyId}`);
+      }
+      approvalTransactionHash = approvalLog.transactionHash;
+      approvalReceipt = await client.getTransactionReceipt({ hash: approvalTransactionHash });
+
+      const beforeOpenBlock = openReceipt.blockNumber - 1n;
       [
-        "wallet",
-        "execute",
-        "openPolicy(address,address,uint256,uint16,uint64,uint256)",
-        config.vaultAddress,
-        config.agentWallet,
-        config.principalAssets.toString(),
-        config.lossLimitBps.toString(),
-        config.durationSeconds.toString(),
-        config.minimumShares.toString(),
-        "--contract",
-        config.managerAddress,
-        "--address",
-        config.agentWallet,
-        "--chain",
-        "ARC-TESTNET",
-        "--output",
-        "json",
-      ],
-      { cwd: config.repositoryRoot },
-    );
-    const openTransactionHash = requireTransactionHash(openOutput, "Policy opening");
-    const openReceipt = await client.waitForTransactionReceipt({ hash: openTransactionHash });
-    if (openReceipt.status !== "success") throw new Error("Policy opening reverted");
+        walletBalanceBefore,
+        keeperBalanceBefore,
+        treasuryBalanceBefore,
+        lossSinkBalanceBefore,
+        walletBalanceAfterOpen,
+        treasuryBalanceAfterOpen,
+      ] = await Promise.all([
+        balanceOf(config.agentWallet, beforeOpenBlock),
+        balanceOf(config.guardianAddress, beforeOpenBlock),
+        balanceOf(TREASURY_ADDRESS, beforeOpenBlock),
+        balanceOf(LOSS_SINK_ADDRESS, beforeOpenBlock),
+        balanceOf(config.agentWallet, openReceipt.blockNumber),
+        balanceOf(TREASURY_ADDRESS, openReceipt.blockNumber),
+      ]);
+      console.log(`Recovered approval and opening proofs. Continuing policy #${policyId}.`);
+    }
 
     const policyBeforeLoss = await client.readContract({
       address: config.managerAddress,
@@ -187,10 +287,6 @@ async function main(): Promise<void> {
       throw new Error("Opened policy terms do not match the Circle Agent Wallet intent");
     }
 
-    const [walletBalanceAfterOpen, treasuryBalanceAfterOpen] = await Promise.all([
-      balanceOf(config.agentWallet),
-      balanceOf(TREASURY_ADDRESS),
-    ]);
     if (
       walletBalanceBefore - walletBalanceAfterOpen !==
       config.principalAssets + PROTECTION_FEE_ASSETS
@@ -202,7 +298,7 @@ async function main(): Promise<void> {
     }
 
     console.log(
-      "Policy is active. Enter the deployer keystore password to create the 3.25% demo loss.",
+      "Policy is active. Enter the DEPLOYER keystore password now (input stays invisible).",
     );
     const lossOutput = await runCaptured(
       config.castBinary,
