@@ -31,6 +31,7 @@ export async function runGuardian(privateKeyOverride?: `0x${string}`): Promise<v
       logger.warn("operation retry scheduled", { attempt, delayMs, error }),
   };
   const monitor = new FinalizedPolicyMonitor({
+    backfillDelayMs: config.backfillDelayMs,
     batchSize: config.blockBatchSize,
     chain,
     logger,
@@ -66,16 +67,21 @@ export async function runGuardian(privateKeyOverride?: `0x${string}`): Promise<v
 
   await runner.initialize();
   await health.start();
-  await runner.runOnce();
-  health.markReady();
-  logger.info("AgentSure guardian started", {
-    keeperAddress: chain.keeperAddress,
-    chainId: config.chainId,
-    managerAddress: config.managerAddress,
-    startBlock: config.startBlock,
-  });
-  await runner.run(controller.signal);
-  await health.stop();
+  try {
+    const ready = await runner.waitUntilReady(controller.signal);
+    if (ready) {
+      health.markReady();
+      logger.info("AgentSure guardian started", {
+        keeperAddress: chain.keeperAddress,
+        chainId: config.chainId,
+        managerAddress: config.managerAddress,
+        startBlock: config.startBlock,
+      });
+      await runner.run(controller.signal);
+    }
+  } finally {
+    await health.stop();
+  }
   logger.info("AgentSure guardian stopped");
 }
 

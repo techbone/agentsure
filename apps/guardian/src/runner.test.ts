@@ -136,6 +136,19 @@ describe("guardian runner", () => {
     expect(chain.submissionCalls).toHaveLength(1);
     expect((await store.load()).policies).toEqual({});
   });
+
+  it("recovers from a startup RPC failure before reporting ready", async () => {
+    const chain = new FakeGuardianGateway();
+    chain.eventFailuresRemaining = 1;
+    const { runner } = buildRunner(chain);
+    const controller = new AbortController();
+
+    await runner.initialize();
+    const ready = await runner.waitUntilReady(controller.signal);
+
+    expect(ready).toBe(true);
+    expect(chain.eventRequests).toHaveLength(2);
+  });
 });
 
 function buildRunnerFromStore(chain: FakeGuardianGateway, store: MemoryGuardianStateStore) {

@@ -31,8 +31,10 @@ Load the environment through the process manager or shell, then run:
 npm run guardian:start
 ```
 
-The first cycle backfills every finalized block from `GUARDIAN_START_BLOCK`. Readiness is not
-reported until that cycle succeeds.
+The first cycle backfills every finalized block from `GUARDIAN_START_BLOCK`. Historical requests
+are paced by `GUARDIAN_BACKFILL_DELAY_MS` to respect public RPC capacity. Readiness is not reported
+until that cycle succeeds. Transient startup failures use bounded exponential retries and then begin
+a new cycle from the last durable cursor rather than terminating the process.
 
 ## Endpoints
 

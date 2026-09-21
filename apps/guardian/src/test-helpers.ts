@@ -49,6 +49,7 @@ export function onchainPolicy(overrides: Partial<OnchainPolicy> = {}): OnchainPo
 
 export class FakeGuardianGateway implements GuardianChainGateway {
   events: PolicyLifecycleEvent[] = [];
+  eventFailuresRemaining = 0;
   finalizedBlock = 10n;
   policies = new Map<bigint, OnchainPolicy>();
   policyValues = new Map<bigint, bigint>();
@@ -69,6 +70,10 @@ export class FakeGuardianGateway implements GuardianChainGateway {
 
   async getLifecycleEvents(fromBlock: bigint, toBlock: bigint): Promise<PolicyLifecycleEvent[]> {
     this.eventRequests.push({ fromBlock, toBlock });
+    if (this.eventFailuresRemaining > 0) {
+      this.eventFailuresRemaining -= 1;
+      throw new Error("Temporary RPC failure");
+    }
     return this.events.filter(
       (event) => event.blockNumber >= fromBlock && event.blockNumber <= toBlock,
     );

@@ -101,4 +101,31 @@ describe("finalized policy monitor", () => {
     expect(chain.eventRequests).toHaveLength(1);
     expect(Object.keys(state.policies)).toEqual(["1"]);
   });
+
+  it("paces historical ranges without delaying the final range", async () => {
+    const chain = new FakeGuardianGateway();
+    chain.finalizedBlock = 14n;
+    const delays: number[] = [];
+    const monitor = new FinalizedPolicyMonitor({
+      backfillDelayMs: 500,
+      batchSize: 2n,
+      chain,
+      logger: quietLogger,
+      metrics: new GuardianMetrics(),
+      sleep: async (milliseconds) => {
+        delays.push(milliseconds);
+      },
+      startBlock: 10n,
+      store: new MemoryGuardianStateStore(),
+    });
+
+    await monitor.sync(createEmptyGuardianState());
+
+    expect(chain.eventRequests).toEqual([
+      { fromBlock: 10n, toBlock: 11n },
+      { fromBlock: 12n, toBlock: 13n },
+      { fromBlock: 14n, toBlock: 14n },
+    ]);
+    expect(delays).toEqual([500, 500]);
+  });
 });

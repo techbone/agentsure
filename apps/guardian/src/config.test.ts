@@ -14,7 +14,10 @@ describe("guardian configuration", () => {
     expect(config.startBlock).toBe(63_052_386n);
     expect(config.chainId).toBe(5_042_002);
     expect(config.blockBatchSize).toBe(2_000n);
+    expect(config.backfillDelayMs).toBe(500);
     expect(config.exitSlippageBps).toBe(100);
+    expect(config.retryAttempts).toBe(6);
+    expect(config.retryBaseDelayMs).toBe(500);
     expect(Object.keys(config)).not.toContain("userWalletPrivateKey");
   });
 

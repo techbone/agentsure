@@ -15,6 +15,7 @@ const addressSchema = z.string().transform((value, context) => {
 const environmentSchema = z.object({
   ARC_MAINNET_RPC_URL: z.url().default("https://rpc.mainnet.arc.io"),
   ARC_TESTNET_RPC_URL: z.url().default("https://rpc.testnet.arc.io"),
+  GUARDIAN_BACKFILL_DELAY_MS: integerString.default("500").transform(Number),
   GUARDIAN_BIND_HOST: z.string().min(1).default("127.0.0.1"),
   GUARDIAN_BLOCK_BATCH_SIZE: integerString.default("2000").transform(Number),
   GUARDIAN_CHAIN_ID: z.enum(["5042", "5042002"]).default("5042002").transform(Number),
@@ -23,13 +24,14 @@ const environmentSchema = z.object({
   GUARDIAN_MANAGER_ADDRESS: addressSchema,
   GUARDIAN_POLL_INTERVAL_MS: integerString.default("1000").transform(Number),
   GUARDIAN_PRIVATE_KEY: privateKeySchema,
-  GUARDIAN_RETRY_ATTEMPTS: integerString.default("3").transform(Number),
-  GUARDIAN_RETRY_BASE_DELAY_MS: integerString.default("250").transform(Number),
+  GUARDIAN_RETRY_ATTEMPTS: integerString.default("6").transform(Number),
+  GUARDIAN_RETRY_BASE_DELAY_MS: integerString.default("500").transform(Number),
   GUARDIAN_START_BLOCK: integerString.transform(BigInt),
   GUARDIAN_STATE_PATH: z.string().min(1).default(".data/guardian-state.json"),
 });
 
 export type GuardianConfig = {
+  backfillDelayMs: number;
   bindHost: string;
   blockBatchSize: bigint;
   chainId: 5_042 | 5_042_002;
@@ -54,6 +56,9 @@ export function loadGuardianConfig(environment: NodeJS.ProcessEnv = process.env)
   if (parsed.GUARDIAN_BLOCK_BATCH_SIZE < 1 || parsed.GUARDIAN_BLOCK_BATCH_SIZE > 10_000) {
     throw new RangeError("GUARDIAN_BLOCK_BATCH_SIZE must be between 1 and 10000");
   }
+  if (parsed.GUARDIAN_BACKFILL_DELAY_MS > 60_000) {
+    throw new RangeError("GUARDIAN_BACKFILL_DELAY_MS must not exceed 60000");
+  }
   if (parsed.GUARDIAN_RETRY_ATTEMPTS < 1 || parsed.GUARDIAN_RETRY_ATTEMPTS > 10) {
     throw new RangeError("GUARDIAN_RETRY_ATTEMPTS must be between 1 and 10");
   }
@@ -62,6 +67,7 @@ export function loadGuardianConfig(environment: NodeJS.ProcessEnv = process.env)
   }
 
   return {
+    backfillDelayMs: parsed.GUARDIAN_BACKFILL_DELAY_MS,
     bindHost: parsed.GUARDIAN_BIND_HOST,
     blockBatchSize: BigInt(parsed.GUARDIAN_BLOCK_BATCH_SIZE),
     chainId: parsed.GUARDIAN_CHAIN_ID as 5_042 | 5_042_002,

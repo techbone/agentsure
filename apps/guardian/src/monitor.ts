@@ -7,6 +7,9 @@ import type {
   PolicyLifecycleEvent,
 } from "./types.js";
 
+const defaultSleep = (milliseconds: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
+
 function compareEvents(left: PolicyLifecycleEvent, right: PolicyLifecycleEvent): number {
   if (left.blockNumber < right.blockNumber) return -1;
   if (left.blockNumber > right.blockNumber) return 1;
@@ -35,27 +38,33 @@ export function applyLifecycleEvent(state: GuardianState, event: PolicyLifecycle
 }
 
 export class FinalizedPolicyMonitor {
+  readonly #backfillDelayMs: number;
   readonly #batchSize: bigint;
   readonly #chain: GuardianChainGateway;
   readonly #logger: JsonLogger;
   readonly #metrics: GuardianMetrics;
   readonly #startBlock: bigint;
   readonly #store: GuardianStateStore;
+  readonly #sleep: (milliseconds: number) => Promise<void>;
 
   constructor(options: {
+    backfillDelayMs?: number;
     batchSize: bigint;
     chain: GuardianChainGateway;
     logger: JsonLogger;
     metrics: GuardianMetrics;
     startBlock: bigint;
     store: GuardianStateStore;
+    sleep?: (milliseconds: number) => Promise<void>;
   }) {
+    this.#backfillDelayMs = options.backfillDelayMs ?? 0;
     this.#batchSize = options.batchSize;
     this.#chain = options.chain;
     this.#logger = options.logger;
     this.#metrics = options.metrics;
     this.#startBlock = options.startBlock;
     this.#store = options.store;
+    this.#sleep = options.sleep ?? defaultSleep;
   }
 
   async sync(state: GuardianState): Promise<void> {
@@ -83,6 +92,9 @@ export class FinalizedPolicyMonitor {
         eventCount: events.length,
       });
       fromBlock = toBlock + 1n;
+      if (fromBlock <= finalizedBlock && this.#backfillDelayMs > 0) {
+        await this.#sleep(this.#backfillDelayMs);
+      }
     }
 
     this.#metrics.activePolicyCount = Object.keys(state.policies).length;

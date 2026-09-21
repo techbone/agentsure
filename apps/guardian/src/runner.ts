@@ -104,6 +104,20 @@ export class GuardianRunner {
     this.#metrics.lastSuccessfulCycleTimestampSeconds = Math.floor(Date.now() / 1000);
   }
 
+  async waitUntilReady(signal: AbortSignal): Promise<boolean> {
+    while (!signal.aborted) {
+      try {
+        await this.runOnce();
+        return true;
+      } catch (error) {
+        this.#logger.error("guardian startup cycle failed", { error });
+      }
+
+      await this.#waitForNextCycle(signal);
+    }
+    return false;
+  }
+
   async run(signal: AbortSignal): Promise<void> {
     while (!signal.aborted) {
       try {
@@ -112,17 +126,21 @@ export class GuardianRunner {
         this.#logger.error("guardian cycle failed", { error });
       }
 
-      await new Promise<void>((resolve) => {
-        const timeout = setTimeout(resolve, this.#pollIntervalMs);
-        signal.addEventListener(
-          "abort",
-          () => {
-            clearTimeout(timeout);
-            resolve();
-          },
-          { once: true },
-        );
-      });
+      await this.#waitForNextCycle(signal);
     }
+  }
+
+  async #waitForNextCycle(signal: AbortSignal): Promise<void> {
+    await new Promise<void>((resolve) => {
+      const timeout = setTimeout(resolve, this.#pollIntervalMs);
+      signal.addEventListener(
+        "abort",
+        () => {
+          clearTimeout(timeout);
+          resolve();
+        },
+        { once: true },
+      );
+    });
   }
 }
