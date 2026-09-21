@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "network": "Arc Testnet",
+  "chainId": 5042002,
+  "completedAt": "2026-09-21T08:21:07.983Z",
+  "participants": {
+    "circleAgentWallet": "0x218b80d3bCDaB79C66ee24AA15A3c8e2527f5E21",
+    "guardian": "0x8125e77Ef9A7db6Ac0ae13a9139C08044C702523",
+    "treasury": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+    "lossSink": "0x000000000000000000000000000000000000dEaD"
+  },
+  "contracts": {
+    "usdc": "0x3600000000000000000000000000000000000000",
+    "protectionManager": "0x3e4E4A3A5A0f0fb908de6D380d817b6579FFDbF5",
+    "demoRiskVault": "0xa70344cEeA5598B836B148B0d83b19eE988b4599"
+  },
+  "policy": {
+    "policyId": "1",
+    "principalAssets": "1000000",
+    "protectionFeeAssets": "10000",
+    "lossLimitBps": 300,
+    "triggerAssets": "970000",
+    "controlledLossAssets": "32500",
+    "valueAfterLoss": "967500",
+    "assetsReturned": "967500",
+    "status": "Executed"
+  },
+  "transactions": {
+    "approval": {
+      "hash": "0x6d99c8465ed16c1fcca2a88a32a39740c7149f00291dd7d9bc7d8c21bf79fce1",
+      "blockNumber": "63226809",
+      "blockHash": "0x956ff81b3e3b0deb00e2dcee4284d82c345f9f5dce81fc69c816e671bf25ef64",
+      "explorerUrl": "https://explorer.testnet.arc.io/tx/0x6d99c8465ed16c1fcca2a88a32a39740c7149f00291dd7d9bc7d8c21bf79fce1"
+    },
+    "policyOpened": {
+      "hash": "0xb81e0c4c93d0d6db446350a70bc98f53dd3bb12dc8960fd58356f77d11a207e6",
+      "blockNumber": "63226830",
+      "blockHash": "0x6cab0672dd6930a0096903ae86975bb15a00a44e52bb3e7cf5562ab5152180e8",
+      "explorerUrl": "https://explorer.testnet.arc.io/tx/0xb81e0c4c93d0d6db446350a70bc98f53dd3bb12dc8960fd58356f77d11a207e6"
+    },
+    "controlledLoss": {
+      "hash": "0xa6585bcab8a8d8ba1fb9dd240b20892df6a978b544d24c0cb6c82f4c4140a6ef",
+      "blockNumber": "63229383",
+      "blockHash": "0x6a5595db8b4d130458f6b9d633b4f2a72a833e0e1c08062f4fac2bbc3d18bd84",
+      "explorerUrl": "https://explorer.testnet.arc.io/tx/0xa6585bcab8a8d8ba1fb9dd240b20892df6a978b544d24c0cb6c82f4c4140a6ef"
+    },
+    "protectionExecuted": {
+      "hash": "0x620a51c4bb872d3739cb85df22ef6ffe29a9f306dd82303c9162c50bdcd41297",
+      "blockNumber": "63229388",
+      "blockHash": "0x53e3ded4e74d8887192be1ce0fe0356a051085651141deeccd86f75f16d60df5",
+      "explorerUrl": "https://explorer.testnet.arc.io/tx/0x620a51c4bb872d3739cb85df22ef6ffe29a9f306dd82303c9162c50bdcd41297"
+    }
+  },
+  "balances": {
+    "circleAgentWalletBefore": "19500000",
+    "circleAgentWalletAfterOpen": "18490000",
+    "circleAgentWalletAfterSettlement": "19457500",
+    "guardianBefore": "500000",
+    "guardianAfter": "496988",
+    "treasuryBefore": "19891853",
+    "treasuryAfterOpen": "19901853",
+    "lossSinkBefore": "11697222607",
+    "lossSinkAfter": "11697255107"
+  },
+  "verified": {
+    "allTransactionReceiptsSuccessful": true,
+    "ownerIsCircleAgentWallet": true,
+    "beneficiaryIsCircleAgentWallet": true,
+    "executorIsDedicatedGuardian": true,
+    "protectionFeeReachedTreasury": true,
+    "triggerWasBreached": true,
+    "settlementMatchedPositionValue": true,
+    "settlementReachedCircleAgentWallet": true,
+    "vaultWasEmptied": true
+  }
+}

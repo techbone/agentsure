@@ -80,6 +80,26 @@
         "callCount": 1
       },
       "explorerUrl": "https://explorer.testnet.arc.io/tx/0x7eb7fd590d1be31e4a589373f5d983b757d5bfcf17313013eb7d8463c00116c0"
+    },
+    "protectedLifecycle": {
+      "policyId": 1,
+      "completedAt": "2026-09-21T08:21:07.983Z",
+      "circleAgentWallet": "0x218b80d3bCDaB79C66ee24AA15A3c8e2527f5E21",
+      "guardian": "0x8125e77Ef9A7db6Ac0ae13a9139C08044C702523",
+      "principalAssets": "1000000",
+      "protectionFeeAssets": "10000",
+      "triggerAssets": "970000",
+      "valueAfterLoss": "967500",
+      "assetsReturned": "967500",
+      "finalPolicyStatus": "Executed",
+      "finalVaultAssets": "0",
+      "transactions": {
+        "approval": "0x6d99c8465ed16c1fcca2a88a32a39740c7149f00291dd7d9bc7d8c21bf79fce1",
+        "policyOpened": "0xb81e0c4c93d0d6db446350a70bc98f53dd3bb12dc8960fd58356f77d11a207e6",
+        "controlledLoss": "0xa6585bcab8a8d8ba1fb9dd240b20892df6a978b544d24c0cb6c82f4c4140a6ef",
+        "protectionExecuted": "0x620a51c4bb872d3739cb85df22ef6ffe29a9f306dd82303c9162c50bdcd41297"
+      },
+      "evidence": "docs/evidence/arc-testnet-lifecycle.json"
     }
   }
 }
