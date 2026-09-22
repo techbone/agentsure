@@ -135,8 +135,8 @@ export function PolicyBuilder({ beneficiary, vault }: { beneficiary: string; vau
         <ShieldCheck className="size-6" strokeWidth={1.5} aria-hidden="true" />
       </div>
 
-      <form onSubmit={submit} className="grid gap-0 lg:grid-cols-[0.92fr_1.08fr]">
-        <div className="space-y-8 p-5 sm:p-7 lg:border-r lg:border-ink/15">
+      <form onSubmit={submit} className="grid min-w-0 gap-0 lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="min-w-0 space-y-8 p-5 sm:p-7 lg:border-r lg:border-ink/15">
           <label className="block">
             <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em]">
               Position size
@@ -229,7 +229,7 @@ export function PolicyBuilder({ beneficiary, vault }: { beneficiary: string; vau
           </div>
         </div>
 
-        <div className="min-h-[560px] bg-[#e7e5db] p-5 sm:p-7">
+        <div className="min-h-[560px] min-w-0 overflow-hidden bg-[#e7e5db] p-5 sm:p-7">
           {state.kind === "ready" ? (
             <PreparedPlan
               copied={copied}
@@ -313,7 +313,7 @@ function PreparedPlan({
   plan: PolicyExecutionPlan;
 }) {
   return (
-    <div className="flex min-h-[504px] flex-col" aria-live="polite">
+    <div className="flex min-h-[504px] min-w-0 max-w-full flex-col" aria-live="polite">
       <div className="flex items-center justify-between gap-4">
         <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/55">
           Finalized block {Number(plan.source.blockNumber).toLocaleString()}
@@ -324,7 +324,7 @@ function PreparedPlan({
       </div>
 
       <div className="mt-10">
-        <p className="font-display text-4xl leading-none tracking-[-0.065em]">
+        <p className="font-display text-3xl leading-none tracking-[-0.065em] sm:text-4xl">
           Ready for
           <br /> Agent Wallet.
         </p>
@@ -333,24 +333,26 @@ function PreparedPlan({
         </p>
       </div>
 
-      <ol className="mt-8 border-y border-ink/15">
+      <ol className="mt-8 min-w-0 border-y border-ink/15">
         {plan.steps.map((step, index) => (
           <li
-            className="grid grid-cols-[28px_1fr] gap-3 border-b border-ink/15 py-3 last:border-0"
+            className="grid min-w-0 grid-cols-[28px_minmax(0,1fr)] gap-3 border-b border-ink/15 py-3 last:border-0"
             key={step.id}
           >
             <span className="font-mono text-[10px] text-ink/45">0{index + 1}</span>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.1em]">
+            <div className="min-w-0">
+              <p className="break-words text-xs font-semibold uppercase tracking-[0.1em]">
                 {index === 0 ? "Bound authorization" : "Open protection policy"}
               </p>
-              <p className="mt-1 text-[11px] leading-5 text-ink/55">{step.description}</p>
+              <p className="mt-1 break-words text-[11px] leading-5 text-ink/55">
+                {step.description}
+              </p>
             </div>
           </li>
         ))}
-        <li className="grid grid-cols-[28px_1fr] gap-3 py-3">
+        <li className="grid min-w-0 grid-cols-[28px_minmax(0,1fr)] gap-3 py-3">
           <span className="font-mono text-[10px] text-ink/45">03</span>
-          <div>
+          <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.1em]">Guardian monitors</p>
             <p className="mt-1 text-[11px] leading-5 text-ink/55">
               Finalized Arc value is watched until exit, cancellation, or expiry.
@@ -359,7 +361,7 @@ function PreparedPlan({
         </li>
       </ol>
 
-      <dl className="mt-5 grid grid-cols-2 gap-x-5 text-[11px]">
+      <dl className="mt-5 grid min-w-0 grid-cols-1 gap-x-5 text-[11px] sm:grid-cols-2">
         <PlanRow label="Wallet balance" value={`${displayUsdc(plan.wallet.balanceAssets)} USDC`} />
         <PlanRow
           label="Exact authorization"
@@ -374,7 +376,7 @@ function PreparedPlan({
         onClick={onCopy}
         type="button"
       >
-        <span className="text-xs font-bold uppercase tracking-[0.14em]">
+        <span className="min-w-0 break-words text-xs font-bold uppercase tracking-[0.14em]">
           {copied ? "Agent instruction copied" : "Copy agent instruction"}
         </span>
         {copied ? (
@@ -390,14 +392,16 @@ function PreparedPlan({
         </p>
       ) : null}
 
-      <details className="mt-4 border-t border-ink/15 pt-4">
+      <details className="mt-4 min-w-0 max-w-full overflow-hidden border-t border-ink/15 pt-4">
         <summary className="flex cursor-pointer list-none items-center justify-between text-[10px] font-bold uppercase tracking-[0.14em]">
           Inspect exact calls <TerminalSquare className="size-4" aria-hidden="true" />
         </summary>
         <div className="mt-4 space-y-4">
           {plan.steps.map((step) => (
-            <div className="bg-ink/[0.06] p-3" key={step.id}>
-              <p className="font-mono text-[10px] font-semibold">{step.functionSignature}</p>
+            <div className="min-w-0 max-w-full overflow-hidden bg-ink/[0.06] p-3" key={step.id}>
+              <p className="break-all font-mono text-[10px] font-semibold">
+                {step.functionSignature}
+              </p>
               <p className="mt-1 font-mono text-[9px] text-ink/50">
                 Target {compactAddress(step.target)}
               </p>
@@ -427,9 +431,9 @@ function PlanRow({
   value: string;
 }) {
   return (
-    <div className={`flex justify-between gap-4 py-3 ${emphasis ? "font-semibold" : ""}`}>
-      <dt className={emphasis ? undefined : "text-ink/55"}>{label}</dt>
-      <dd className="text-right font-mono">{value}</dd>
+    <div className={`flex min-w-0 justify-between gap-4 py-3 ${emphasis ? "font-semibold" : ""}`}>
+      <dt className={`min-w-0 break-words ${emphasis ? "" : "text-ink/55"}`}>{label}</dt>
+      <dd className="shrink-0 text-right font-mono">{value}</dd>
     </div>
   );
 }
