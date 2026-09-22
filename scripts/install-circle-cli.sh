@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly CIRCLE_CLI_VERSION="1.1.3"
+readonly CIRCLE_CLI_VERSION="1.1.4"
 readonly REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 readonly INSTALL_DIRECTORY="${REPOSITORY_ROOT}/.tools/circle-cli-${CIRCLE_CLI_VERSION}"
 readonly CIRCLE_BINARY="${INSTALL_DIRECTORY}/node_modules/.bin/circle"

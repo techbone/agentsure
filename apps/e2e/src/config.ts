@@ -77,7 +77,7 @@ export function loadLifecycleConfig(environment: NodeJS.ProcessEnv = process.env
     chain: isMainnet ? arc : arcTestnet,
     circleBinary:
       environment.CIRCLE_BINARY ??
-      `${repositoryRoot}.tools/circle-cli-1.1.3/node_modules/.bin/circle`,
+      `${repositoryRoot}.tools/circle-cli-1.1.4/node_modules/.bin/circle`,
     circleChain: isMainnet ? "ARC" : "ARC-TESTNET",
     deploymentBlock,
     durationSeconds: 86_400n,
