@@ -7,6 +7,15 @@
   "deployer": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
   "guardian": "0x58E92E6AF85D2F05237B8b948Af185B5e40ab1fC",
   "circleAgentWallet": "0x6b9b032be42343944bd383cc3f0a3e4c6120106f",
+  "circleAgentWalletPolicy": {
+    "contractAllowlist": [
+      "0x3600000000000000000000000000000000000000",
+      "0xa70344cEeA5598B836B148B0d83b19eE988b4599"
+    ],
+    "origin": "CUSTOM",
+    "createdAt": "2026-09-22T12:37:23.508396Z",
+    "verified": true
+  },
   "contracts": {
     "DemoRiskVault": {
       "address": "0x09503c928c13ebc01EfB6fD291825020C5e876Ba",
