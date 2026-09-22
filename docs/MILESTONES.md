@@ -143,6 +143,7 @@ Evidence:
 ## Milestone 6 — Mainnet deployment
 
 Target: October 6–8
+Status: In progress — mainnet protocol and public product complete; hosted guardian pending
 
 Deliverables:
 
@@ -156,6 +157,17 @@ Exit criteria:
 - The full controlled breach and exit work on Arc mainnet.
 - Product and repository links are public and openable.
 - Mainnet caps and treasury ownership are disclosed.
+
+Evidence:
+
+- The capped contracts are deployed and source-verified on Arc Mainnet.
+- Mainnet policy `#1` completed the approval, opening, controlled breach, guardian execution, and
+  direct beneficiary settlement lifecycle.
+- Canonical transaction, balance, block, and verification evidence is preserved in
+  `docs/evidence/arc-mainnet-lifecycle.json`.
+- The public product is deployed at
+  [agentsure-web-indol.vercel.app](https://agentsure-web-indol.vercel.app/) and its production APIs
+  read finalized Arc Mainnet state and prepare mainnet-only Circle Agent Wallet commands.
 
 ## Milestone 7 — Security and submission
 

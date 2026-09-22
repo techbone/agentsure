@@ -6,6 +6,8 @@ AgentSure lets an autonomous agent open a protected onchain position with an obj
 
 AgentSure V1 is **automated risk protection**, not insurance. The protection fee pays for monitoring and execution; it does not promise reimbursement for losses. Funded insurance pools and parametric payouts are a later protocol phase.
 
+[Open the live AgentSure product on Arc Mainnet](https://agentsure-web-indol.vercel.app/)
+
 ## MVP thesis
 
 > A Circle Agent Wallet opens a USDC position through AgentSure. If the position's redeemable value falls below the user's predefined threshold during the coverage window, AgentSure exits the position and returns the remaining USDC to the user's wallet.
