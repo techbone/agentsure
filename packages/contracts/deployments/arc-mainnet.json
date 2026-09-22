@@ -1,0 +1,76 @@
+{
+  "network": "Arc Mainnet",
+  "chainId": 5042,
+  "rpcUrl": "https://rpc.mainnet.arc.io",
+  "explorerUrl": "https://explorer.arc.io",
+  "deployedAt": "2026-09-22T11:36:33Z",
+  "deployer": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+  "guardian": "0x58E92E6AF85D2F05237B8b948Af185B5e40ab1fC",
+  "circleAgentWallet": "0x6b9b032be42343944bd383cc3f0a3e4c6120106f",
+  "contracts": {
+    "DemoRiskVault": {
+      "address": "0x09503c928c13ebc01EfB6fD291825020C5e876Ba",
+      "transactionHash": "0x9831d545569ec5a8d968f8e96665ebecefc6c8028ea6869b243abe9863f16663",
+      "blockNumber": 22171478,
+      "blockHash": "0xa675359e8b287aeb46835b87d7f1fe769eee2539bc39c31c580a77a58dba8085",
+      "source": "src/DemoRiskVault.sol:DemoRiskVault",
+      "compiler": "0.8.30",
+      "verified": false,
+      "verificationStatus": "pending: Arc Explorer API returned a Cloudflare challenge",
+      "configuration": {
+        "assetToken": "0x3600000000000000000000000000000000000000",
+        "owner": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+        "lossSink": "0x000000000000000000000000000000000000dEaD",
+        "depositCapAssets": "1000000",
+        "depositCapUsdc": "1"
+      },
+      "explorerUrl": "https://explorer.arc.io/address/0x09503c928c13ebc01EfB6fD291825020C5e876Ba"
+    },
+    "ProtectionManager": {
+      "address": "0xa70344cEeA5598B836B148B0d83b19eE988b4599",
+      "transactionHash": "0x0274f173d8c74dd43300c68b18b8548795a0606537c72dcc1b77c15aaad75c44",
+      "blockNumber": 22171481,
+      "blockHash": "0xbb6e3c32e0f1fc872a93e3ea02dbaba062462c35ffb63370d54627682911abbc",
+      "source": "src/ProtectionManager.sol:ProtectionManager",
+      "compiler": "0.8.30",
+      "verified": false,
+      "verificationStatus": "pending: Arc Explorer API returned a Cloudflare challenge",
+      "configuration": {
+        "assetToken": "0x3600000000000000000000000000000000000000",
+        "owner": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+        "treasury": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+        "protectionFeeAssets": "10000",
+        "protectionFeeUsdc": "0.01",
+        "maxPrincipalAssets": "1000000",
+        "maxPrincipalUsdc": "1",
+        "minDurationSeconds": 300,
+        "maxDurationSeconds": 604800,
+        "minLossLimitBps": 100,
+        "maxLossLimitBps": 5000,
+        "allowedVault": "0x09503c928c13ebc01EfB6fD291825020C5e876Ba",
+        "vaultAllowlistTransactionHash": "0xe5d4cba87ae0ac59082d40f2ea65a260b44ffd17a816a8457df17b71b47ac8f1",
+        "vaultAllowlistBlockNumber": 22171487,
+        "vaultAllowlistBlockHash": "0x0ea9c1c429798781cdb50cbdfad22e37c0bd3ffcb9418b0935d25833e49516e5"
+      },
+      "explorerUrl": "https://explorer.arc.io/address/0xa70344cEeA5598B836B148B0d83b19eE988b4599"
+    }
+  },
+  "deploymentCost": {
+    "nativeWei": "76219167776722308",
+    "usdc": "0.076219167776722308",
+    "deployerBalanceAfterNativeWei": "173780832223277692",
+    "deployerBalanceAfterUsdc": "0.173780832223277692"
+  },
+  "verifiedState": {
+    "vaultBytecodePresent": true,
+    "managerBytecodePresent": true,
+    "ownerMatchesDeployer": true,
+    "treasuryMatchesDeployer": true,
+    "assetTokenMatchesArcUsdc": true,
+    "vaultCapIsOneUsdc": true,
+    "principalCapIsOneUsdc": true,
+    "vaultIsAllowed": true,
+    "openingsPaused": false,
+    "nextPolicyId": "1"
+  }
+}
