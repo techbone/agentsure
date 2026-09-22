@@ -75,8 +75,9 @@ margin; gas conditions and sponsorship behavior may change.
 
 ## Broadcast and source verification
 
-The broadcast command uses an encrypted Foundry keystore and submits source verification to Arc
-Explorer's Blockscout endpoint:
+The broadcast command uses an encrypted Foundry keystore and submits public source verification to
+Sourcify. Sourcify provides independent creation/runtime bytecode matching and can forward successful
+verification to compatible explorers:
 
 ```bash
 npm run contracts:deploy:protection:mainnet

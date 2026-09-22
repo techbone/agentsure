@@ -15,8 +15,16 @@
       "blockHash": "0xa675359e8b287aeb46835b87d7f1fe769eee2539bc39c31c580a77a58dba8085",
       "source": "src/DemoRiskVault.sol:DemoRiskVault",
       "compiler": "0.8.30",
-      "verified": false,
-      "verificationStatus": "pending: Arc Explorer API returned a Cloudflare challenge",
+      "verified": true,
+      "verification": {
+        "provider": "Sourcify",
+        "match": "match",
+        "creationMatch": "match",
+        "runtimeMatch": "match",
+        "matchId": "51494500",
+        "verifiedAt": "2026-09-22T11:55:00Z",
+        "url": "https://repo.sourcify.dev/5042/0x09503c928c13ebc01EfB6fD291825020C5e876Ba"
+      },
       "configuration": {
         "assetToken": "0x3600000000000000000000000000000000000000",
         "owner": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
@@ -33,8 +41,16 @@
       "blockHash": "0xbb6e3c32e0f1fc872a93e3ea02dbaba062462c35ffb63370d54627682911abbc",
       "source": "src/ProtectionManager.sol:ProtectionManager",
       "compiler": "0.8.30",
-      "verified": false,
-      "verificationStatus": "pending: Arc Explorer API returned a Cloudflare challenge",
+      "verified": true,
+      "verification": {
+        "provider": "Sourcify",
+        "match": "match",
+        "creationMatch": "match",
+        "runtimeMatch": "match",
+        "matchId": "51494511",
+        "verifiedAt": "2026-09-22T11:55:40Z",
+        "url": "https://repo.sourcify.dev/5042/0xa70344cEeA5598B836B148B0d83b19eE988b4599"
+      },
       "configuration": {
         "assetToken": "0x3600000000000000000000000000000000000000",
         "owner": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",

@@ -31,8 +31,8 @@ case "${MODE}" in
       --keystore "${KEYSTORE}" \
       --broadcast \
       --verify \
-      --verifier blockscout \
-      --verifier-url https://explorer.arc.io/api/ \
+      --verifier sourcify \
+      --verifier-url https://sourcify.dev/server \
       --slow
     ;;
   *)
