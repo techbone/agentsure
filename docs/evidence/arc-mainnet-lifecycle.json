@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "network": "Arc",
+  "chainId": 5042,
+  "completedAt": "2026-09-22T13:52:54.664Z",
+  "participants": {
+    "circleAgentWallet": "0x6b9B032be42343944bd383Cc3f0a3e4C6120106f",
+    "guardian": "0x58E92E6AF85D2F05237B8b948Af185B5e40ab1fC",
+    "treasury": "0x7602fB6EB360f28d9DE0e5adA6F8576A1f2CaEd5",
+    "lossSink": "0x000000000000000000000000000000000000dEaD"
+  },
+  "contracts": {
+    "usdc": "0x3600000000000000000000000000000000000000",
+    "protectionManager": "0xa70344cEeA5598B836B148B0d83b19eE988b4599",
+    "demoRiskVault": "0x09503c928c13ebc01EfB6fD291825020C5e876Ba"
+  },
+  "policy": {
+    "policyId": "1",
+    "principalAssets": "1000000",
+    "protectionFeeAssets": "10000",
+    "lossLimitBps": 300,
+    "triggerAssets": "970000",
+    "controlledLossAssets": "32500",
+    "valueAfterLoss": "967500",
+    "assetsReturned": "967500",
+    "status": "Executed"
+  },
+  "transactions": {
+    "approval": {
+      "hash": "0x172484eb4984ec1d2accc86031db7c90016b6ecc3dcf91c550728e18ee66275b",
+      "blockNumber": "22187552",
+      "blockHash": "0x91b00ce182b3fbb08d4e7e576900e887ea628037078cee2ea5091b4420980d08"
+    },
+    "policyOpened": {
+      "hash": "0xd1a0b62dab37e34d86bfd93e3426617f8aa29c056d1b12035b0f4e3bbd1e9776",
+      "blockNumber": "22187576",
+      "blockHash": "0x436ab937b6b10bf54821377a76c3d647cf111e9e0c529554d7411a4dd1e5f474"
+    },
+    "controlledLoss": {
+      "hash": "0xc58bb67d60845036c2a7a73ae21ef84c04b85476ec392b2a43084e5b91b55602",
+      "blockNumber": "22187604",
+      "blockHash": "0x7a625c55c975b8877604687d0f40edfa916d4dfa4edf845166d9d9c20eb2d5a7"
+    },
+    "protectionExecuted": {
+      "hash": "0x616adc37976d5ba7fe113e90163f4b739455e42ba03603b96da351683750a886",
+      "blockNumber": "22187609",
+      "blockHash": "0x7ad1ea3a0f0eb1c19538c3342de058e5a3d4d624c9e858b4c1d27f9fbcf89d24"
+    }
+  },
+  "balances": {
+    "circleAgentWalletBefore": "1070000",
+    "circleAgentWalletAfterOpen": "60000",
+    "circleAgentWalletAfterSettlement": "1027500",
+    "circleAgentWalletNetworkFeesBeforeSettlement": "0",
+    "guardianBefore": "10000",
+    "guardianAfter": "7195",
+    "treasuryBefore": "123359",
+    "treasuryAfterOpen": "133359",
+    "lossSinkBefore": "164448992",
+    "lossSinkAfter": "164481492"
+  },
+  "verified": {
+    "ownerIsCircleAgentWallet": true,
+    "beneficiaryIsCircleAgentWallet": true,
+    "executorIsDedicatedGuardian": true,
+    "protectionFeeReachedTreasury": true,
+    "walletDebitCoveredProtocolAndNetworkFees": true,
+    "triggerWasBreached": true,
+    "settlementMatchedPositionValue": true,
+    "settlementReachedCircleAgentWallet": true,
+    "vaultWasEmptied": true
+  }
+}

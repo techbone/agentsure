@@ -96,6 +96,28 @@
     "principalCapIsOneUsdc": true,
     "vaultIsAllowed": true,
     "openingsPaused": false,
-    "nextPolicyId": "1"
+    "nextPolicyId": "2"
+  },
+  "proofs": {
+    "protectedLifecycle": {
+      "policyId": 1,
+      "completedAt": "2026-09-22T13:52:54.664Z",
+      "circleAgentWallet": "0x6b9B032be42343944bd383Cc3f0a3e4C6120106f",
+      "guardian": "0x58E92E6AF85D2F05237B8b948Af185B5e40ab1fC",
+      "principalAssets": "1000000",
+      "protectionFeeAssets": "10000",
+      "triggerAssets": "970000",
+      "valueAfterLoss": "967500",
+      "assetsReturned": "967500",
+      "finalPolicyStatus": "Executed",
+      "finalVaultAssets": "0",
+      "transactions": {
+        "approval": "0x172484eb4984ec1d2accc86031db7c90016b6ecc3dcf91c550728e18ee66275b",
+        "policyOpened": "0xd1a0b62dab37e34d86bfd93e3426617f8aa29c056d1b12035b0f4e3bbd1e9776",
+        "controlledLoss": "0xc58bb67d60845036c2a7a73ae21ef84c04b85476ec392b2a43084e5b91b55602",
+        "protectionExecuted": "0x616adc37976d5ba7fe113e90163f4b739455e42ba03603b96da351683750a886"
+      },
+      "evidence": "docs/evidence/arc-mainnet-lifecycle.json"
+    }
   }
 }
