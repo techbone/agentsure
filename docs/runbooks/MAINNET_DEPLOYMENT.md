@@ -44,6 +44,9 @@ The guardian and web application never receive Circle credentials.
 Prepared mainnet guardian: `0x58E92E6AF85D2F05237B8b948Af185B5e40ab1fC`. Its encrypted
 keystore stays local and is excluded from Git.
 
+Verified Circle ARC Agent Wallet: `0x6b9b032be42343944bd383cc3f0a3e4c6120106f`. Circle CLI reports
+this address as the authenticated mainnet agent wallet; it owns each policy and receives settlement.
+
 ## Read-only preparation
 
 ```bash
@@ -58,8 +61,8 @@ without a broadcast.
 
 ## Funding budget
 
-At the September 21, 2026 preflight gas price, the three-transaction deployment simulation estimated
-approximately `0.1965 USDC`. Start with the smallest practical balances:
+At the September 22, 2026 preflight gas price of `45.6565 gwei`, the three-transaction deployment
+simulation estimated approximately `0.22366 USDC`. Start with the smallest practical balances:
 
 - deployer/admin: `0.25 USDC` initially for deployment and the controlled-loss call;
 - dedicated guardian: `0.01 USDC` initially for one protection execution and a modest retry margin;
