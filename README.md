@@ -98,6 +98,7 @@ contract returned all `0.9675 USDC` directly to the Circle Agent Wallet benefici
 - [Testnet lifecycle and recovery runbook](docs/runbooks/TESTNET_LIFECYCLE.md)
 - [Arc Mainnet deployment runbook](docs/runbooks/MAINNET_DEPLOYMENT.md)
 - [Vercel web deployment runbook](docs/runbooks/VERCEL_DEPLOYMENT.md)
+- [Railway guardian deployment runbook](docs/runbooks/RAILWAY_GUARDIAN.md)
 
 ## Official references
 

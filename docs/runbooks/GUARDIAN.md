@@ -23,6 +23,10 @@ The testnet defaults point to:
 Hosted deployments must inject `GUARDIAN_PRIVATE_KEY` through their secrets manager. Environment
 contents and the state directory must not be committed.
 
+On Railway, the guardian automatically uses the platform-provided `PORT`. When a volume is attached,
+it also derives its durable state path from `RAILWAY_VOLUME_MOUNT_PATH`. See the
+[Railway guardian deployment runbook](RAILWAY_GUARDIAN.md).
+
 ## Start
 
 Load the environment through the process manager or shell, then run:

@@ -32,6 +32,30 @@ describe("guardian configuration", () => {
     expect(config.rpcUrl).toBe("https://mainnet.example.com");
   });
 
+  it("uses Railway's injected port and attached volume by default", () => {
+    const config = loadGuardianConfig({
+      ...validEnvironment,
+      PORT: "8080",
+      RAILWAY_VOLUME_MOUNT_PATH: "/data",
+    });
+
+    expect(config.httpPort).toBe(8_080);
+    expect(config.statePath).toBe("/data/guardian-state.json");
+  });
+
+  it("allows explicit guardian paths and ports to override platform values", () => {
+    const config = loadGuardianConfig({
+      ...validEnvironment,
+      GUARDIAN_HTTP_PORT: "9464",
+      GUARDIAN_STATE_PATH: "/custom/state.json",
+      PORT: "8080",
+      RAILWAY_VOLUME_MOUNT_PATH: "/data",
+    });
+
+    expect(config.httpPort).toBe(9_464);
+    expect(config.statePath).toBe("/custom/state.json");
+  });
+
   it("rejects an unsafe exit slippage bound", () => {
     expect(() =>
       loadGuardianConfig({ ...validEnvironment, GUARDIAN_EXIT_SLIPPAGE_BPS: "501" }),
