@@ -2,6 +2,20 @@ import type { Hash } from "viem";
 
 const TRANSACTION_HASH_PATTERN = /^0x[0-9a-fA-F]{64}$/;
 
+export function calculateWalletNetworkFees(
+  balanceBefore: bigint,
+  balanceAfterOpen: bigint,
+  principalAssets: bigint,
+  protectionFeeAssets: bigint,
+): bigint {
+  const protocolDebit = principalAssets + protectionFeeAssets;
+  const actualDebit = balanceBefore - balanceAfterOpen;
+  if (actualDebit < protocolDebit) {
+    throw new Error("Agent Wallet debit is smaller than principal plus protection fee");
+  }
+  return actualDebit - protocolDebit;
+}
+
 export function requireTransactionHash(output: string, label: string): Hash {
   const value = JSON.parse(output) as unknown;
   const visit = (candidate: unknown): Hash | null => {

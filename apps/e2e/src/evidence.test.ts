@@ -1,9 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { requireTransactionHash, serializeEvidence } from "./evidence.js";
+import {
+  calculateWalletNetworkFees,
+  requireTransactionHash,
+  serializeEvidence,
+} from "./evidence.js";
 
 const HASH = `0x${"a".repeat(64)}`;
 
 describe("lifecycle evidence", () => {
+  it("separates protocol debit from Agent Wallet network fees", () => {
+    expect(calculateWalletNetworkFees(1_070_000n, 10_000n, 1_000_000n, 10_000n)).toBe(50_000n);
+  });
+
+  it("rejects an underfunded protocol debit", () => {
+    expect(() => calculateWalletNetworkFees(1_000_000n, 0n, 1_000_000n, 10_000n)).toThrow(
+      "smaller than principal plus protection fee",
+    );
+  });
+
   it("extracts a nested Circle transaction hash", () => {
     expect(requireTransactionHash(JSON.stringify({ data: { txHash: HASH } }), "Circle")).toBe(HASH);
   });

@@ -14,7 +14,11 @@ import {
 } from "viem";
 import { reverseBlockRanges } from "./block-ranges.js";
 import { loadLifecycleConfig } from "./config.js";
-import { requireTransactionHash, serializeEvidence } from "./evidence.js";
+import {
+  calculateWalletNetworkFees,
+  requireTransactionHash,
+  serializeEvidence,
+} from "./evidence.js";
 import { runCaptured, spawnGuardian, stopProcess } from "./process.js";
 
 const PROTECTION_FEE_ASSETS = 10_000n;
@@ -294,12 +298,12 @@ async function main(): Promise<void> {
       throw new Error("Opened policy terms do not match the Circle Agent Wallet intent");
     }
 
-    if (
-      walletBalanceBefore - walletBalanceAfterOpen !==
-      config.principalAssets + PROTECTION_FEE_ASSETS
-    ) {
-      throw new Error("Agent Wallet debit does not equal principal plus protection fee");
-    }
+    const walletNetworkFeesBeforeSettlement = calculateWalletNetworkFees(
+      walletBalanceBefore,
+      walletBalanceAfterOpen,
+      config.principalAssets,
+      PROTECTION_FEE_ASSETS,
+    );
     if (treasuryBalanceAfterOpen - treasuryBalanceBefore !== PROTECTION_FEE_ASSETS) {
       throw new Error("Treasury did not receive the declared protection fee");
     }
@@ -464,6 +468,7 @@ async function main(): Promise<void> {
         circleAgentWalletBefore: walletBalanceBefore,
         circleAgentWalletAfterOpen: walletBalanceAfterOpen,
         circleAgentWalletAfterSettlement: walletBalanceAfter,
+        circleAgentWalletNetworkFeesBeforeSettlement: walletNetworkFeesBeforeSettlement,
         guardianBefore: keeperBalanceBefore,
         guardianAfter: keeperBalanceAfter,
         treasuryBefore: treasuryBalanceBefore,
@@ -476,6 +481,7 @@ async function main(): Promise<void> {
         beneficiaryIsCircleAgentWallet: true,
         executorIsDedicatedGuardian: true,
         protectionFeeReachedTreasury: true,
+        walletDebitCoveredProtocolAndNetworkFees: true,
         triggerWasBreached: true,
         settlementMatchedPositionValue: true,
         settlementReachedCircleAgentWallet: true,
