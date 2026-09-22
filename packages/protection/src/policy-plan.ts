@@ -99,6 +99,7 @@ export function createPolicyExecutionPlan(options: {
   onchain: PolicyPlanOnchainState;
 }): PolicyExecutionPlan {
   const deployment = normalizeDeployment(options.deployment);
+  const circleChain = circleChainFor(deployment.chainId);
   const { intent, onchain } = options;
   const principalAssets = parseUsdc(intent.amountUsdc);
   const duration = BigInt(intent.durationSeconds);
@@ -187,6 +188,7 @@ export function createPolicyExecutionPlan(options: {
   const approveCommand = circleExecuteCommand({
     address: deployment.wallet,
     args: [deployment.manager, authorizationAssets.toString()],
+    chain: circleChain,
     contract: deployment.usdc,
     signature: "approve(address,uint256)",
   });
@@ -200,6 +202,7 @@ export function createPolicyExecutionPlan(options: {
       duration.toString(),
       minimumShares.toString(),
     ],
+    chain: circleChain,
     contract: deployment.manager,
     signature: "openPolicy(address,address,uint256,uint16,uint64,uint256)",
   });
@@ -292,6 +295,7 @@ function normalizeDeployment(deployment: PolicyPlanDeployment): PolicyPlanDeploy
 function circleExecuteCommand(options: {
   address: Address;
   args: string[];
+  chain: "ARC" | "ARC-TESTNET";
   contract: Address;
   signature: string;
 }): string {
@@ -303,6 +307,22 @@ function circleExecuteCommand(options: {
     options.contract,
     "--address",
     options.address,
-    "--chain ARC-TESTNET --output json",
+    "--chain",
+    options.chain,
+    "--output",
+    "json",
   ].join(" ");
+}
+
+function circleChainFor(chainId: number): "ARC" | "ARC-TESTNET" {
+  if (chainId === 5_042) {
+    return "ARC";
+  }
+  if (chainId === 5_042_002) {
+    return "ARC-TESTNET";
+  }
+  throw new PolicyPlanError(
+    "UNSUPPORTED_CHAIN",
+    `Circle Agent Wallet execution is not configured for chain ${chainId}.`,
+  );
 }

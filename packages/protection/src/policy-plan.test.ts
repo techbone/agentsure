@@ -68,7 +68,31 @@ describe("AgentSure policy execution plan", () => {
     expect(plan.steps[1].cliCommand).toContain(
       '"openPolicy(address,address,uint256,uint16,uint64,uint256)"',
     );
+    expect(plan.steps.every((step) => step.cliCommand.includes("--chain ARC-TESTNET"))).toBe(true);
     expect(plan.agentInstruction).toContain("Do not alter the targets");
+  });
+
+  it("targets Arc Mainnet in commands prepared for chain 5042", () => {
+    const plan = createPolicyExecutionPlan({
+      deployment: { ...deployment, chainId: 5_042, network: "Arc Mainnet" },
+      intent,
+      onchain,
+    });
+
+    expect(plan.steps.every((step) => step.cliCommand.includes("--chain ARC --output json"))).toBe(
+      true,
+    );
+    expect(plan.agentInstruction).not.toContain("ARC-TESTNET");
+  });
+
+  it("refuses to prepare commands for an unsupported chain", () => {
+    expect(() =>
+      createPolicyExecutionPlan({
+        deployment: { ...deployment, chainId: 1, network: "Ethereum" },
+        intent,
+        onchain,
+      }),
+    ).toThrowError(expect.objectContaining({ code: "UNSUPPORTED_CHAIN", name: "PolicyPlanError" }));
   });
 
   it("produces the same intent id for the same confirmed terms", () => {
