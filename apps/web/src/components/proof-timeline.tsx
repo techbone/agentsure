@@ -1,4 +1,4 @@
-import proof from "../../../../docs/evidence/arc-testnet-lifecycle.json";
+import proof from "../../../../docs/evidence/arc-mainnet-lifecycle.json";
 import { ArrowUpRight, Check } from "lucide-react";
 import { explorerTransactionUrl } from "@/lib/display";
 

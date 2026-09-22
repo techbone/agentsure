@@ -71,10 +71,10 @@ export function PolicyBuilder({ beneficiary, vault }: { beneficiary: string; vau
       });
       return;
     }
-    if (parseUsdc(parsed.data.amountUsdc) > 2_000_000n) {
+    if (parseUsdc(parsed.data.amountUsdc) > 1_000_000n) {
       setState({
         kind: "failed",
-        message: "Position size exceeds the deployed 2 USDC testnet cap.",
+        message: "Position size exceeds the deployed 1 USDC mainnet cap.",
       });
       return;
     }
@@ -146,7 +146,7 @@ export function PolicyBuilder({ beneficiary, vault }: { beneficiary: string; vau
                 aria-label="Position size in USDC"
                 className="min-w-0 flex-1 bg-transparent font-display text-5xl font-medium tracking-[-0.07em] outline-none sm:text-6xl"
                 inputMode="decimal"
-                max="2"
+                max="1"
                 min="0.000001"
                 name="amount"
                 onChange={(event) => updateDraft({ ...draft, amountUsdc: event.target.value })}
@@ -155,7 +155,7 @@ export function PolicyBuilder({ beneficiary, vault }: { beneficiary: string; vau
               />
               <span className="text-xs font-bold tracking-[0.16em]">USDC</span>
             </span>
-            <span className="mt-2 block text-[11px] text-ink/55">Testnet cap: 2 USDC</span>
+            <span className="mt-2 block text-[11px] text-ink/55">Mainnet cap: 1 USDC</span>
           </label>
 
           <div className="grid grid-cols-2 gap-5">

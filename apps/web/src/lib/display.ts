@@ -19,5 +19,5 @@ export function displayDuration(seconds: number): string {
 }
 
 export function explorerTransactionUrl(hash: string): string {
-  return `https://explorer.testnet.arc.io/tx/${hash}`;
+  return `https://explorer.arc.io/tx/${hash}`;
 }

@@ -1,4 +1,4 @@
-import proof from "../../../../docs/evidence/arc-testnet-lifecycle.json";
+import proof from "../../../../docs/evidence/arc-mainnet-lifecycle.json";
 import { ArrowDown, ArrowUpRight, CircleDot, Radio, ShieldCheck } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 import { PolicyBuilder } from "@/components/policy-builder";
@@ -15,7 +15,7 @@ export default function HomePage() {
           <div className="flex items-center gap-5">
             <span className="hidden items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/50 sm:flex">
               <span className="size-1.5 rounded-full bg-lime shadow-[0_0_10px_#c8ff3d]" /> Arc
-              testnet
+              mainnet
             </span>
             <a
               className="border border-paper/25 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.14em] hover:border-lime hover:text-lime"
@@ -231,14 +231,14 @@ export default function HomePage() {
             <span>USDC native</span>
             <a
               className="flex items-center gap-1 hover:text-lime"
-              href={`https://explorer.testnet.arc.io/address/${proof.contracts.protectionManager}`}
+              href={`https://explorer.arc.io/address/${proof.contracts.protectionManager}`}
               rel="noreferrer"
               target="_blank"
             >
               View contract <ArrowUpRight className="size-3" aria-hidden="true" />
             </a>
             <span className="flex items-center gap-1.5 text-lime">
-              <CircleDot className="size-3" aria-hidden="true" /> Testnet live
+              <CircleDot className="size-3" aria-hidden="true" /> Mainnet live
             </span>
           </div>
         </div>

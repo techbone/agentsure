@@ -1,5 +1,5 @@
-import deploymentManifest from "../../../../../../../packages/contracts/deployments/arc-testnet.json";
-import lifecycleProof from "../../../../../../../docs/evidence/arc-testnet-lifecycle.json";
+import deploymentManifest from "../../../../../../../packages/contracts/deployments/arc-mainnet.json";
+import lifecycleProof from "../../../../../../../docs/evidence/arc-mainnet-lifecycle.json";
 import { demoRiskVaultAbi } from "@agentsure/chain/demo-risk-vault";
 import { protectionManagerAbi } from "@agentsure/chain/protection-manager";
 import { parseUsdc } from "@agentsure/domain/money";
@@ -7,7 +7,7 @@ import { policyIntentSchema } from "@agentsure/domain/policy";
 import { createPolicyExecutionPlan, PolicyPlanError } from "@agentsure/protection/policy-plan";
 import { NextResponse } from "next/server";
 import { createPublicClient, erc20Abi, getAddress, http, isAddressEqual, type Address } from "viem";
-import { arcTestnet } from "viem/chains";
+import { arc } from "viem/chains";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +46,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json(
       {
         code: "UNSUPPORTED_DEMO_TARGET",
-        message: "Milestone 5 supports only the verified Agent Wallet and allowlisted demo vault.",
+        message: "AgentSure supports only the verified Agent Wallet and allowlisted mainnet vault.",
       },
       { status: 400 },
     );
@@ -55,8 +55,8 @@ export async function POST(request: Request): Promise<NextResponse> {
   try {
     const principalAssets = parseUsdc(parsed.data.amountUsdc);
     const client = createPublicClient({
-      chain: arcTestnet,
-      transport: http(process.env.ARC_TESTNET_RPC_URL ?? deploymentManifest.rpcUrl),
+      chain: arc,
+      transport: http(process.env.ARC_MAINNET_RPC_URL ?? deploymentManifest.rpcUrl),
     });
     const managerCall = <TFunctionName extends ManagerReadFunction>(
       functionName: TFunctionName,

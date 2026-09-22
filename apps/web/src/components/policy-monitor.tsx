@@ -170,7 +170,7 @@ export function PolicyMonitor({ policyId = "1" }: { policyId?: string }) {
             </button>
             <a
               className="flex items-center gap-1 hover:text-lime"
-              href={`https://explorer.testnet.arc.io/address/${policy.managerAddress}`}
+              href={`https://explorer.arc.io/address/${policy.managerAddress}`}
               rel="noreferrer"
               target="_blank"
             >
