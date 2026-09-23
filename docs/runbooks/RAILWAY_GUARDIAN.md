@@ -63,7 +63,8 @@ is ready:
 
 ```bash
 .tools/arc-foundry/v0.8.0-1/cast wallet decrypt-keystore \
-  packages/contracts/keystores/agentsure-mainnet-guardian
+  --keystore-dir packages/contracts/keystores \
+  agentsure-mainnet-guardian
 ```
 
 Enter the keystore password at the hidden prompt, copy the displayed private key directly into the
