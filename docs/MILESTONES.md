@@ -2,7 +2,7 @@
 
 The microgrant is reviewed on a rolling basis and requires a live Arc mainnet deployment, a public repository, and an openable product link. Testnet-only work is not eligible.
 
-Target submission: **October 10, 2026**
+Target submission: **as soon as final reviewer checks pass, no later than October 10, 2026**
 Program deadline: **October 14, 2026 at 23:59 ET**
 
 ## Milestone 0 — Thesis and architecture
@@ -143,7 +143,7 @@ Evidence:
 ## Milestone 6 — Mainnet deployment
 
 Target: October 6–8
-Status: In progress — mainnet protocol and public product complete; hosted guardian pending
+Status: Complete
 
 Deliverables:
 
@@ -168,6 +168,8 @@ Evidence:
 - The public product is deployed at
   [agentsure-web-indol.vercel.app](https://agentsure-web-indol.vercel.app/) and its production APIs
   read finalized Arc Mainnet state and prepare mainnet-only Circle Agent Wallet commands.
+- The Railway-hosted guardian passes its public [readiness check](https://agentsure-production.up.railway.app/readyz)
+  and advances its finalized-block cursor with zero reported RPC or execution failures at verification.
 
 ## Milestone 7 — Security and submission
 

@@ -141,7 +141,7 @@ export function PolicyMonitor({ policyId = "1" }: { policyId?: string }) {
             <dd className="mt-1 font-mono">{displayUsdc(policy.triggerAssets)} USDC</dd>
           </div>
           <div className="py-4 pl-4">
-            <dt className="text-paper/40">Loss bound</dt>
+            <dt className="text-paper/40">Trigger drop</dt>
             <dd className="mt-1 font-mono">{policy.lossLimitBps / 100}%</dd>
           </div>
           <div className="border-r border-t border-paper/10 py-4 pr-4">

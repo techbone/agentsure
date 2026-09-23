@@ -53,8 +53,8 @@ export default function HomePage() {
                     Protocol build 0.5
                   </p>
                   <p className="max-w-lg text-base leading-7 text-paper/[0.68] sm:text-lg">
-                    Autonomous agents can move money. AgentSure gives those movements a
-                    deterministic downside boundary—and acts when it breaks.
+                    Autonomous agents can move money. AgentSure monitors supported positions against
+                    a predefined exit trigger and acts when it is met.
                   </p>
                 </div>
               </div>

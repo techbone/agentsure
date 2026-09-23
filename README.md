@@ -2,7 +2,7 @@
 
 **The programmable safety layer for autonomous money.**
 
-AgentSure lets an autonomous agent open a protected onchain position with an objective downside rule. A separate risk guardian monitors the position and, when the rule is breached, triggers an onchain exit back to USDC.
+AgentSure lets a Circle Agent Wallet open a USDC position with a predefined onchain exit trigger. A separate risk guardian monitors the position and, when the trigger is met, submits an exit that returns the remaining USDC to the wallet.
 
 AgentSure V1 is **automated risk protection**, not insurance. The protection fee pays for monitoring and execution; it does not promise reimbursement for losses. Funded insurance pools and parametric payouts are a later protocol phase.
 
@@ -31,6 +31,7 @@ The MVP proves one complete Arc-native lifecycle:
 - No claim of guaranteed stop-loss execution.
 - No insurance or reimbursement promise in V1.
 - No protection for positions that were not opened through AgentSure in V1.
+- The web app prepares Agent Wallet calls but does not submit them; an MCP server and a general-purpose agent integration are not shipped in V1.
 
 ## Current status
 
@@ -57,6 +58,8 @@ and the reviewer-facing product surface reads the resulting policy and evidence 
 - The responsive product console prepares a bounded policy against finalized Arc state, emits exact
   Circle Agent Wallet calldata without browser custody, monitors live policy state, and links every
   lifecycle proof to the Arc explorer.
+- The hosted guardian is [ready on Railway](https://agentsure-production.up.railway.app/readyz);
+  its public metrics show a progressing finalized-block cursor.
 - CI covers formatting, linting, type checks, tests, npm audit, and repository secret scanning.
 
 ### Run the product locally
@@ -90,6 +93,7 @@ contract returned all `0.9675 USDC` directly to the Circle Agent Wallet benefici
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Milestones](docs/MILESTONES.md)
+- [Microgrant submission draft](docs/SUBMISSION_DRAFT.md)
 - [ADR-0001: Protect at entry](docs/adr/0001-protect-at-entry.md)
 - [ADR-0002: Separate permissionless guardian](docs/adr/0002-separate-permissionless-guardian.md)
 - [ADR-0003: Prepare Agent Wallet intents without browser custody](docs/adr/0003-prepare-wallet-intents-server-side.md)

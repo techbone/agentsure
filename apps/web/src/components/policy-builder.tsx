@@ -161,7 +161,7 @@ export function PolicyBuilder({ beneficiary, vault }: { beneficiary: string; vau
           <div className="grid grid-cols-2 gap-5">
             <label>
               <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em]">
-                Max downside
+                Exit trigger
               </span>
               <span className="flex border-b border-ink/30 pb-2 focus-within:border-ink">
                 <input
@@ -281,7 +281,7 @@ function DraftPreview({
           </p>
           <dl className="mt-9 divide-y divide-ink/15 border-y border-ink/15 text-xs">
             <PlanRow label="Principal" value={`${formatUsdc(preview.principal)} USDC`} />
-            <PlanRow label="Protection rule" value={`−${draft.maxLossBps / 100}%`} />
+            <PlanRow label="Trigger drop" value={`−${draft.maxLossBps / 100}%`} />
             <PlanRow label="Duration" value={displayDuration(draft.durationSeconds)} />
             <PlanRow label="Estimated fee" value="0.01 USDC" />
             <PlanRow

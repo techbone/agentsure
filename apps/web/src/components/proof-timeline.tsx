@@ -8,8 +8,8 @@ const STEPS = [
   {
     key: "controlledLoss",
     index: "03",
-    title: "Boundary crossed",
-    detail: "Value fell to 0.9675 USDC",
+    title: "Demo trigger crossed",
+    detail: "Controlled loss reduced value to 0.9675 USDC",
   },
   {
     key: "protectionExecuted",
