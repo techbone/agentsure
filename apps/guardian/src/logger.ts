@@ -1,8 +1,14 @@
-type LogLevel = "debug" | "info" | "warn" | "error";
+export type LogLevel = "debug" | "info" | "warn" | "error";
 type LogFields = Record<string, unknown>;
 type LogSink = (line: string) => void;
 
 const SECRET_FIELD = /(private.?key|password|secret|seed|mnemonic)/i;
+const LEVEL_PRIORITY: Record<LogLevel, number> = {
+  debug: 0,
+  info: 1,
+  warn: 2,
+  error: 3,
+};
 
 function sanitize(value: unknown, key = ""): unknown {
   if (SECRET_FIELD.test(key)) {
@@ -30,9 +36,11 @@ function sanitize(value: unknown, key = ""): unknown {
 
 export class JsonLogger {
   readonly #sink: LogSink;
+  readonly #minimumLevel: LogLevel;
 
-  constructor(sink: LogSink = console.log) {
+  constructor(sink: LogSink = console.log, minimumLevel: LogLevel = "info") {
     this.#sink = sink;
+    this.#minimumLevel = minimumLevel;
   }
 
   debug(message: string, fields: LogFields = {}): void {
@@ -52,6 +60,7 @@ export class JsonLogger {
   }
 
   #write(level: LogLevel, message: string, fields: LogFields): void {
+    if (LEVEL_PRIORITY[level] < LEVEL_PRIORITY[this.#minimumLevel]) return;
     this.#sink(
       JSON.stringify({
         timestamp: new Date().toISOString(),

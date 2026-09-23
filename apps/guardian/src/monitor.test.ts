@@ -18,6 +18,30 @@ function openedEvent(blockNumber = 10n, logIndex = 0) {
 }
 
 describe("finalized policy monitor", () => {
+  it("logs ranges with policy events but not empty ranges at the default level", async () => {
+    const chain = new FakeGuardianGateway();
+    chain.finalizedBlock = 11n;
+    chain.events = [openedEvent()];
+    const lines: string[] = [];
+    const monitor = new FinalizedPolicyMonitor({
+      batchSize: 1n,
+      chain,
+      logger: new JsonLogger((line) => lines.push(line)),
+      metrics: new GuardianMetrics(),
+      startBlock: 10n,
+      store: new MemoryGuardianStateStore(),
+    });
+
+    await monitor.sync(createEmptyGuardianState());
+
+    expect(lines).toHaveLength(1);
+    expect(JSON.parse(lines[0] ?? "{}")).toMatchObject({
+      level: "info",
+      message: "finalized block range indexed",
+      eventCount: 1,
+    });
+  });
+
   it("resumes from the block after its durable cursor", async () => {
     const chain = new FakeGuardianGateway();
     chain.events = [openedEvent()];

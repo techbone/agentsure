@@ -15,7 +15,7 @@ export async function runGuardian(privateKeyOverride?: `0x${string}`): Promise<v
       ? process.env
       : { ...process.env, GUARDIAN_PRIVATE_KEY: privateKeyOverride },
   );
-  const logger = new JsonLogger();
+  const logger = new JsonLogger(console.log, config.logLevel);
   const metrics = new GuardianMetrics();
   const store = new FileGuardianStateStore(config.statePath);
   const chain = new ViemGuardianGateway({

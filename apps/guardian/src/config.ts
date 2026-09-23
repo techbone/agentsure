@@ -1,6 +1,7 @@
 import { getAddress, type Address, type Hex } from "viem";
 import { z } from "zod";
 import { join } from "node:path";
+import type { LogLevel } from "./logger.js";
 
 const integerString = z.string().regex(/^\d+$/);
 const privateKeySchema = z.string().regex(/^0x[0-9a-fA-F]{64}$/);
@@ -22,6 +23,7 @@ const environmentSchema = z.object({
   GUARDIAN_CHAIN_ID: z.enum(["5042", "5042002"]).default("5042002").transform(Number),
   GUARDIAN_EXIT_SLIPPAGE_BPS: integerString.default("100").transform(Number),
   GUARDIAN_HTTP_PORT: integerString.transform(Number).optional(),
+  GUARDIAN_LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
   GUARDIAN_MANAGER_ADDRESS: addressSchema,
   GUARDIAN_POLL_INTERVAL_MS: integerString.default("1000").transform(Number),
   GUARDIAN_PRIVATE_KEY: privateKeySchema,
@@ -40,6 +42,7 @@ export type GuardianConfig = {
   chainId: 5_042 | 5_042_002;
   exitSlippageBps: number;
   httpPort: number;
+  logLevel: LogLevel;
   managerAddress: Address;
   pollIntervalMs: number;
   privateKey: Hex;
@@ -82,6 +85,7 @@ export function loadGuardianConfig(environment: NodeJS.ProcessEnv = process.env)
     chainId: parsed.GUARDIAN_CHAIN_ID as 5_042 | 5_042_002,
     exitSlippageBps: parsed.GUARDIAN_EXIT_SLIPPAGE_BPS,
     httpPort,
+    logLevel: parsed.GUARDIAN_LOG_LEVEL,
     managerAddress: parsed.GUARDIAN_MANAGER_ADDRESS,
     pollIntervalMs: parsed.GUARDIAN_POLL_INTERVAL_MS,
     privateKey: parsed.GUARDIAN_PRIVATE_KEY as Hex,

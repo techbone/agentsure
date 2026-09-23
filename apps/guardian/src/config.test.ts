@@ -18,6 +18,7 @@ describe("guardian configuration", () => {
     expect(config.exitSlippageBps).toBe(100);
     expect(config.retryAttempts).toBe(6);
     expect(config.retryBaseDelayMs).toBe(500);
+    expect(config.logLevel).toBe("info");
     expect(Object.keys(config)).not.toContain("userWalletPrivateKey");
   });
 
@@ -66,5 +67,11 @@ describe("guardian configuration", () => {
     expect(() =>
       loadGuardianConfig({ ...validEnvironment, GUARDIAN_PRIVATE_KEY: "not-a-key" }),
     ).toThrow();
+  });
+
+  it("allows explicit debug logging", () => {
+    expect(loadGuardianConfig({ ...validEnvironment, GUARDIAN_LOG_LEVEL: "debug" }).logLevel).toBe(
+      "debug",
+    );
   });
 });

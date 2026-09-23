@@ -43,6 +43,7 @@ GUARDIAN_START_BLOCK=22171481
 GUARDIAN_BLOCK_BATCH_SIZE=2000
 GUARDIAN_BACKFILL_DELAY_MS=500
 GUARDIAN_POLL_INTERVAL_MS=1000
+GUARDIAN_LOG_LEVEL=info
 GUARDIAN_EXIT_SLIPPAGE_BPS=100
 GUARDIAN_RETRY_ATTEMPTS=6
 GUARDIAN_RETRY_BASE_DELAY_MS=500
@@ -87,6 +88,10 @@ Expected health responses are `{"status":"ok"}` and `{"status":"ready"}`. Logs s
 `AgentSure guardian started` record with chain ID `5042`, the mainnet manager, and guardian address.
 The metrics cursor should advance while confirmed execution count remains stable unless a new policy
 breaches its rule.
+
+Empty finalized block ranges are silent at the default `info` level; policy events, protection
+transactions, retries, and errors remain logged. Set `GUARDIAN_LOG_LEVEL=debug` temporarily only
+when investigating indexing, because it prints every polled range.
 
 ## Recovery check
 

@@ -86,7 +86,8 @@ export class FinalizedPolicyMonitor {
 
       state.lastProcessedBlock = toBlock;
       await this.#store.save(state);
-      this.#logger.debug("finalized block range indexed", {
+      const logLevel = events.length > 0 ? "info" : "debug";
+      this.#logger[logLevel]("finalized block range indexed", {
         fromBlock,
         toBlock,
         eventCount: events.length,
