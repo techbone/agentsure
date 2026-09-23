@@ -8,12 +8,17 @@ or a shipped MCP integration.
 
 AgentSure
 
-## Short description
+## BUIDL Vision (242 of 256 characters)
 
-AgentSure gives supported USDC positions opened by Circle Agent Wallets a predefined onchain exit
-trigger. A wallet opens a bounded position on Arc; a separate guardian monitors finalized state
-and submits the exit when the trigger is met. The remaining USDC returns directly to the wallet. V1 is
-automated exit, not insurance.
+Wallet limits cannot prevent loss after an authorized USDC deposit. AgentSure sets exit triggers for supported Arc positions; a guardian monitors finalized value and submits the exit. Remaining USDC returns to the agent wallet. Not insurance.
+
+## BUIDL discovery tags
+
+- Key innovation domains: `Infra / API`, `Security`, and `Crypto-AI`.
+- Layer-1: `Arc` only if custom input is accepted; otherwise leave blank because Arc is not among
+  the listed choices.
+- Layer-2 and other open-source ecosystems: leave blank. AgentSure V1 is deployed on Arc, not on
+  any of the listed L2s or other ecosystems.
 
 ## What we built and why Arc
 
