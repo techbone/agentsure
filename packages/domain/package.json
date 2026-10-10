@@ -14,7 +14,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "viem": "2.56.8",
+    "viem": "2.57.3",
     "zod": "4.6.5"
   }
 }
