@@ -93,7 +93,6 @@ contract returned all `0.9675 USDC` directly to the Circle Agent Wallet benefici
 - [Machine-readable lifecycle evidence](docs/evidence/arc-mainnet-lifecycle.json)
 
 - [Architecture](docs/ARCHITECTURE.md)
-- [Milestones](docs/MILESTONES.md)
 - [ADR-0001: Protect at entry](docs/adr/0001-protect-at-entry.md)
 - [ADR-0002: Separate permissionless guardian](docs/adr/0002-separate-permissionless-guardian.md)
 - [ADR-0003: Prepare Agent Wallet intents without browser custody](docs/adr/0003-prepare-wallet-intents-server-side.md)
