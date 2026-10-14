@@ -60,7 +60,8 @@ and the reviewer-facing product surface reads the resulting policy and evidence 
   lifecycle proof to the Arc explorer.
 - The hosted guardian is [ready on Railway](https://agentsure-production.up.railway.app/readyz);
   its public metrics show a progressing finalized-block cursor.
-- CI covers formatting, linting, type checks, tests, npm audit, and repository secret scanning.
+- `npm run check` covers formatting, linting, type checks, and tests; `npm run contracts:test` and
+  `npm run security:slither` cover the contracts.
 
 ### Run the product locally
 
